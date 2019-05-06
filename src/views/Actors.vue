@@ -18,7 +18,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Name</span>
                 </div>
-                <input type="text" class="form-control" v-model="actor.name" v-blur />
+                <input type="text" class="form-control" v-model="actor.name" />
               </div>
               <div v-for="(value, key) in actorOptions" class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -49,7 +49,7 @@
                     <button class="btn btn-danger btn-sm mt-1" @click="deleteState(index, stateIndex)">Delete</button>
                   </div>
                   <div class="col-6">
-                    <input type="text" class="form-control" v-model="state.key" v-blur />
+                    <input type="text" class="form-control" v-model="state.key" />
                   </div>
                   <div class="col-3">
                     <canvas :ref="`prev-anim-${index}${separator}${stateIndex}`" style="background: #f8f8f8;"></canvas>

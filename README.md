@@ -13,10 +13,6 @@ A tricky part was mapping all the frames, animations, tiles and actors. Since yo
 
 Plans for expansion:
 - Turn some inputs into components
-- Make the core unit measures configurable:
-  - unit size
-  - grid width
-  - grid height
 - Make any navigable canvas mouse-clickable
 - Add a grid viewer to the frames screen
 - Add steps and unit size to the frame screen
