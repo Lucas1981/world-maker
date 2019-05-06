@@ -95,7 +95,7 @@ export default class Maps extends Base {
 
   mounted() {
     this.start = new Date();
-    this.mapCanvas = new Canvas(960, 720, this.$refs.map);
+    this.mapCanvas = new Canvas(this.unit * this.gridWidth, this.unit * this.gridHeight, this.$refs.map);
     this.tilesCanvas = new Canvas(256, 256, this.$refs.tiles);
     this.actorsCanvas = new Canvas(256, 384, this.$refs.actors);
     this.mainLoop();
@@ -107,6 +107,7 @@ export default class Maps extends Base {
     const now: Date = new Date();
     const elapsedTime: number = now - this.start;
 
+    this.mapCanvas.clearCanvas();
     this.drawAvailableTiles(elapsedTime);
     this.drawAvailableActors(elapsedTime);
     this.handleKeyboardInput(maxX, maxY);

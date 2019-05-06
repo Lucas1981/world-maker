@@ -24,6 +24,8 @@ export default abstract class Base extends Vue {
   private hasPressed: any = hasPressed;
 
   public get unit(): number { return this.$store.getters.unit; }
+  public get gridWidth(): number { return this.$store.getters.gridWidth; }
+  public get gridHeight(): number { return this.$store.getters.gridHeight; }
   public get frames(): Frame[] { return this.$store.getters.frames; }
   public get framesMapper(): Mapper { return this.$store.getters.framesMapper; }
   public get animationsMapper(): Mapper { return this.$store.getters.animationsMapper; }

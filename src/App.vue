@@ -27,10 +27,7 @@
         </li>
       </ul>
 
-      <div v-if="isLoading">
-        Loading...
-      </div>
-      <div v-else>
+      <div v-if="!isLoading">
         <router-view/>
       </div>
 
@@ -77,6 +74,8 @@ export default class App extends Vue {
     this.$store.commit('setTilesMapper', new Mapper());
     this.$store.commit('setActorsMapper', new Mapper());
     this.$store.commit('setUnit', 64);
+    this.$store.commit('setGridWidth', 15);
+    this.$store.commit('setGridHeight', 11);
     this.$store.commit('setLoading', false);
   }
 }

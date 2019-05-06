@@ -39,10 +39,11 @@ export default class Frames extends Base {
   private emptyFrame: Canvas;
   private maxFrames: number;
   public fileName: string = '';
-  public step: number = 64;
+  public step: number;
   public sourceFileName: string;
 
   mounted() {
+    this.step = this.unit;
     this.maxFrames = Math.pow(parseInt(512 / this.unit), 2);
     this.sourceImageCanvas = new Canvas(512, 512, this.$refs.sourceImageCanvas);
     this.sourceImageCanvasOffscreen = new Canvas(512, 512, null, true);

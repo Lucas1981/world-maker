@@ -4,7 +4,36 @@
       <button class="btn btn-primary mx-1" @click="loadWorldProxy($event)" v-blur>Load world</button>
       <input type="file" class="d-none" ref="loadSelection" @change="loadWorld($event)"></button>
       <button class="btn btn-primary mx-1" @click="saveWorld" v-blur>Save world</button>
-      <button class="btn btn-danger mx-1" @click="newWorld" v-blur>New world</button>
+      <button class="btn btn-danger mx-1" @click="openModal()">New world</button>
+
+      <modal
+        :open="isModalOpen"
+        modal-ref="newWorldRef"
+        modal-title="New World"
+        @modal-close="onModalClose"
+      >
+        <div class="input-group mb-3">
+          <div class="input-group-append">
+            <span class="input-group-text" id="unit-size">Unit size</span>
+          </div>
+          <input type="number" v-model="newWorldConfig.unit" class="form-control" placeholder="Unit size" aria-label="Unit size" aria-describedby="unit-size">
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-append">
+            <span class="input-group-text" id="grid-width">Grid width</span>
+          </div>
+          <input type="number" v-model="newWorldConfig.gridWidth" class="form-control" placeholder="Grid width" aria-label="Grid width" aria-describedby="grid-width">
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-append">
+            <span class="input-group-text" id="grid-height">Grid height</span>
+          </div>
+          <input type="number" v-model="newWorldConfig.gridHeight" class="form-control" placeholder="Grid height" aria-label="Grid height" aria-describedby="grid-height">
+        </div>
+
+      </modal>
     </p>
   </div>
 </template>
@@ -16,11 +45,35 @@ import Frame from '../classes/Frame';
 import Animation from '../classes/Animation';
 import Canvas from '../classes/Canvas';
 import Mapper from '../classes/Mapper';
+import Modal from '@/components/Modal.vue';
 
 @Component({
-  name: 'FileMenu'
+  name: 'FileMenu',
+  components: {
+    Modal
+  }
 })
 export default class FileMenu extends Vue {
+  public newWorldConfig = {
+    unit: 64,
+    gridWidth: 15,
+    gridHeight: 11
+  };
+  public isModalOpen = false;
+
+  openModal() {
+    this.$store.commit('setLoading', true);
+    this.isModalOpen = true;
+  }
+
+  public onModalClose(value) {
+    this.isModalOpen = false;
+
+    if(value) {
+      this.newWorld();
+    }
+    this.$store.commit('setLoading', false);
+  }
 
   public saveWorld(event) {
     // Let's create a world
@@ -29,6 +82,8 @@ export default class FileMenu extends Vue {
     // First, let's record the basic stuff, like units
     world.config = {
       unit: this.$store.getters.unit,
+      gridWidth: this.$store.getters.gridWidth,
+      gridHeight: this.$store.getters.gridHeight
     };
 
     // Then, let's record the frames
@@ -125,7 +180,6 @@ export default class FileMenu extends Vue {
     this.$store.commit('setAnimationsMapper', new Mapper());
     this.$store.commit('setTilesMapper', new Mapper());
     this.$store.commit('setActorsMapper', new Mapper());
-    this.$store.commit('setUnit', 64);
 
     // First, load the image source data
     image.src = content.imageData;
@@ -144,6 +198,8 @@ export default class FileMenu extends Vue {
 
     // Set the global configuration
     this.$store.commit('setUnit', content.config.unit);
+    this.$store.commit('setGridWidth', content.config.gridWidth);
+    this.$store.commit('setGridHeight', content.config.gridHeight);
 
     // Then, populate the frames
     for (const frame of content.frames) {
@@ -183,7 +239,7 @@ export default class FileMenu extends Vue {
     this.$refs.loadSelection.value = '';
   }
 
-  public newWorld() {
+  private newWorld() {
     this.$store.commit('setLoading', true);
     this.$store.commit('clearAll');
     this.$store.commit('setSourceImage', new Image());
@@ -192,7 +248,9 @@ export default class FileMenu extends Vue {
     this.$store.commit('setAnimationsMapper', new Mapper());
     this.$store.commit('setTilesMapper', new Mapper());
     this.$store.commit('setActorsMapper', new Mapper());
-    this.$store.commit('setUnit', 64);
+    this.$store.commit('setGridWidth', +this.newWorldConfig.gridWidth);
+    this.$store.commit('setGridHeight', +this.newWorldConfig.gridHeight);
+    this.$store.commit('setUnit', +this.newWorldConfig.unit);
     this.$store.commit('setLoading', false);
   }
 }

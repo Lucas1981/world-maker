@@ -7,9 +7,6 @@ import KeyboardInput from './classes/KeyboardInput.ts';
 import LinkedList from './classes/LinkedList.ts';
 import Mapper from './classes/Mapper.ts';
 
-const mapWidth = 15;
-const mapHeight = 11;
-
 const actorOptions = {
   collidable: [
     { key: 'Solid', value: 'solid'},
@@ -42,6 +39,8 @@ export default new Vuex.Store({
     tilesMapper: null,
     animationsMapper: null,
     framesMapper: null,
+    gridWidth: 15,
+    gridHeight: 11,
     unit: 0,
     loading: true
   },
@@ -60,6 +59,8 @@ export default new Vuex.Store({
     tilesMapper(state): Mapper { return state.tilesMapper; },
     actorsMapper(state): Mapper { return state.actorsMapper; },
     actorOptions(): object { return actorOptions; },
+    gridWidth(state): number { return state.gridWidth; },
+    gridHeight(state): number { return state.gridHeight; },
     unit(state): number { return state.unit; },
     isLoading(state): Boolean { return state.loading; }
   },
@@ -77,9 +78,9 @@ export default new Vuex.Store({
       const stagedActors = new LinkedList();
 
       if (grid === null) {
-        grid = new Array(mapHeight);
+        grid = new Array(state.gridHeight);
         for (let i: number = 0; i < grid.length; i++) {
-          grid[i] = new Array(mapWidth).fill(0);
+          grid[i] = new Array(state.gridWidth).fill(0);
         }
       }
 
@@ -266,6 +267,12 @@ export default new Vuex.Store({
     },
     setFramesMapper(state, framesMapper: Mapper): void {
       state.framesMapper = framesMapper;
+    },
+    setGridWidth(state, gridWidth: number) {
+      state.gridWidth = gridWidth;
+    },
+    setGridHeight(state, gridHeight: number) {
+      state.gridHeight = gridHeight;
     },
     setUnit(state, unit: number): void {
       state.unit = unit;
