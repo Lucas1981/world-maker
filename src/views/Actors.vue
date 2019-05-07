@@ -29,8 +29,8 @@
                 </select>
               </div>
               <div>
-                <button class="btn btn-primary btn-sm" @click="saveTemplate(actor)">Save template</button>
-                <button class="btn btn-primary btn-sm ml-2" @click="loadTemplateProxy(index)">Load template</button>
+                <button class="btn btn-primary btn-sm" @click="saveTemplate(actor)" v-blur>Save template</button>
+                <button class="btn btn-primary btn-sm ml-2" @click="loadTemplateProxy(index)" v-blur>Load template</button>
                 <input type="file" class="d-none" :ref="`load-actor-button-${index}`" @change="loadTemplate($event, index)"></button>
               </div>
               <div v-for="(state, stateIndex) in actor.states" class="my-2">

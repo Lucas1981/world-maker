@@ -12,7 +12,7 @@
           x: {{ x }} |
           y: {{ y }}
         </p>
-        <p><button @click="flipImage()" class="btn btn-primary btn-sm">Flip canvas</button></p>
+        <p><button @click="flipImage()" class="btn btn-primary btn-sm" v-blur>Flip canvas</button></p>
       </div>
       <div class="col-6">
         <h3>Target canvas</h3>
