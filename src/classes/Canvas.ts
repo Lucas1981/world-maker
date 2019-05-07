@@ -3,7 +3,6 @@ import Vue from 'vue';
 const BACKGROUND = '#f8f8f8';
 
 export default class Canvas {
-
   private canvasPointer: any;
   private context: any;
 
@@ -20,6 +19,10 @@ export default class Canvas {
 
   public getContext(): any {
     return this.context;
+  }
+
+  public getDataURL(): any {
+    return this.canvasPointer.toDataURL();
   }
 
   public get width() {

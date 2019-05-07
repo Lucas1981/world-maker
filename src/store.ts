@@ -103,6 +103,12 @@ export default new Vuex.Store({
       // No one relies on maps, so we can easily remove them
       state.maps.splice(index, 1);
     },
+    loadActorStatesTemplate(state, { index, stateNames }: object) {
+      state.actors[index].states = stateNames.map(key => ({
+        key,
+        value: null
+      }));
+    },
     addState(state, index: number): void {
       const states = state.actors[index].states;
       state.actors[index].states.push({

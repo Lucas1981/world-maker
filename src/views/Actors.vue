@@ -28,6 +28,11 @@
                   <option v-for="record in value" :bind="record.value">{{ record.key }}</option>
                 </select>
               </div>
+              <div>
+                <button class="btn btn-primary btn-sm" @click="saveTemplate(actor)">Save template</button>
+                <button class="btn btn-primary btn-sm ml-2" @click="loadTemplateProxy(index)">Load template</button>
+                <input type="file" class="d-none" :ref="`load-actor-button-${index}`" @change="loadTemplate($event, index)"></button>
+              </div>
               <div v-for="(state, stateIndex) in actor.states" class="my-2">
                 <div class="row">
                   <div class="col-3">
@@ -75,6 +80,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import Base from './Base.ts';
 import Canvas from '../classes/Canvas.ts'
 import Actor from '../classes/Actor.ts';
+import FileHandler from '../classes/FileHandler';
 
 const separator = '-';
 
@@ -107,6 +113,27 @@ export default class Tiles extends Base {
     this.drawRubberBand(this.displayCanvas);
 
     if (!this.isDestroyed) this.request.call(window, this.mainLoop.bind(this));
+  }
+
+  public saveTemplate(actor) {
+    FileHandler.downloadJsonFile('actor-template.json', actor.states.map(e => e.key));
+  }
+
+  public loadTemplateProxy(index) {
+    const button = this.$refs[`load-actor-button-${index}`][0];
+    button.click();
+  }
+
+  public async loadTemplate(event, index) {
+    const stateNames: string[] = await FileHandler.handleJsonFile(event);
+    this.$store.commit('loadActorStatesTemplate', { index, stateNames });
+    this.$nextTick(() => {
+      for (let i = 0; i < this.actors[index].states.length; i++) {
+        const key: string = `prev-anim-${index}${separator}${i}`;
+        this.canvases[key] = new Canvas(this.unit, this.unit, this.$refs[key][0]);
+        this.activeSelection = `${index}${separator}0`;
+      }
+    });
   }
 
   public addActor() {

@@ -18,7 +18,6 @@ Plans for expansion:
 - Add steps and unit size to the frame screen
 - Add a button that automatically maps the selected grid density to frames (with a from/to limit)
 - Add a button that automatically maps the frames to animations (with a from/to limit)
-- Make the source canvas flippable
 - Make a color that must be filtered selectable
 - Create a way to include sound management
 

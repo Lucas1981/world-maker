@@ -12,6 +12,7 @@
           x: {{ x }} |
           y: {{ y }}
         </p>
+        <p><button @click="flipImage()" class="btn btn-primary btn-sm">Flip canvas</button></p>
       </div>
       <div class="col-6">
         <h3>Target canvas</h3>
@@ -72,6 +73,27 @@ export default class Frames extends Base {
     this.drawRubberBand(this.sourceImageCanvas);
 
     if (!this.isDestroyed) this.request.call(window, this.mainLoop.bind(this));
+  }
+
+  public flipImage() {
+    const source = new Canvas(this.sourceImage.width, this.sourceImage.height, null, true);
+    source.drawImage(this.sourceImage);
+    const sourceData = source.getImageData().data;
+    const destCanvas = new Canvas(this.sourceImage.width, this.sourceImage.height, null, true);
+    const destContext = destCanvas.getContext();
+    const destImageData = destCanvas.getImageData();
+    const destData = destImageData.data;
+    for (let i = 0; i < destData.length; i += 4) {
+      const x = this.sourceImage.width - parseInt(parseInt(i / 4) % this.sourceImage.width);
+      const y = parseInt(parseInt(i / 4) / this.sourceImage.width);
+      const sourceBase = (x + (y * this.sourceImage.width)) * 4;
+      destData[i + 0] = sourceData[sourceBase + 0];
+      destData[i + 1] = sourceData[sourceBase + 1];
+      destData[i + 2] = sourceData[sourceBase + 2];
+      destData[i + 3] = sourceData[sourceBase + 3];
+    }
+    destContext.putImageData(destImageData, 0, 0);
+    this.sourceImage.src = destCanvas.getDataURL();
   }
 
   public async handleFile(event: object): void {
