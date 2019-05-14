@@ -32,6 +32,7 @@ export default new Vuex.Store({
     tiles: [],
     animations: [],
     frames: [],
+    sounds: [],
     keyboard: null,
     canvas: null,
     sourceImage: null,
@@ -51,6 +52,7 @@ export default new Vuex.Store({
     tiles(state): [] { return state.tiles; },
     animations(state): Animation[] { return state.animations; },
     frames(state): Frame[] { return state.frames; },
+    sounds(state): [] { return state.sounds; },
     keyboard(state): KeyboardInput { return state.keyboard; },
     canvas(state): Canvas { return state.canvas; },
     sourceImage(state): object { return state.sourceImage; },
@@ -72,6 +74,7 @@ export default new Vuex.Store({
       state.tiles = [];
       state.animations = [];
       state.frames = [];
+      state.sounds = [];
       state.unit = 0;
     },
     addMap(state, { grid = null, actors = null }: object = {}): void {
@@ -233,6 +236,12 @@ export default new Vuex.Store({
       state.animationsMapper.adjustMap(key); // Adjust the animationsMapper records accordingly
       state.animations.splice(value, 1); // Finally, kill the animation
     },
+    addSound(state, sound) {
+      state.sounds.push(sound);
+    },
+    removeSound(state, index) {
+      state.sounds.splice(index, 1);
+    },
     addFrame(state, {x, y}: object): void {
       const frame: Frame = new Frame(
         state.canvas.getCanvasElement(),
@@ -285,6 +294,9 @@ export default new Vuex.Store({
     },
     setLoading(state, loading: boolean): void {
       state.loading = loading;
+    },
+    setSounds(state, sounds: object): void {
+      state.sounds = sounds;
     }
   },
 });

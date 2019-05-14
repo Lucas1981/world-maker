@@ -1,5 +1,38 @@
 export default class FileHandler {
 
+  public static async handleSoundFile(evt) {
+    return new Promise( (resolve, reject) => {
+      if (evt.target.files.length === 0) {
+          reject('No file selected');
+      }
+
+      if (evt.target.files.length > 1) {
+        reject('Only one file can be selected');
+      }
+
+      const file: any = evt.target.files[0]; // FileList object
+
+      // Only process image files.
+      if (!file.type.match('audio.*')) {
+        reject('Only sound files supported');
+      }
+
+      const reader: any = new FileReader();
+
+      // Closure to capture the file information.
+      reader.onload = ( (theFile) => {
+        return (e) => {
+          // Render thumbnail.
+          resolve(e.target.result);
+        };
+      })(file);
+
+      // Read in the image file as a data URL.
+
+      reader.readAsDataURL(file);
+    });
+  }
+
   public static async handleImageFile(evt) {
     return new Promise( (resolve, reject) => {
       if (evt.target.files.length === 0) {
