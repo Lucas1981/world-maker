@@ -173,6 +173,7 @@ export default class FileMenu extends Vue {
     // ?We might have to globally lock down the animation loop while we do this?
 
     const content: object = await FileHandler.handleJsonFile(event);
+    console.log(content);
     const image: Image = new Image();
 
     this.$store.commit('setLoading', true);
@@ -221,6 +222,8 @@ export default class FileMenu extends Vue {
     for (const animation of content.animations) {
       this.$store.commit('addAnimation', { indices: animation.data, loopType: animation.loopType });
     }
+
+    console.log('still going');
 
     // Then, populate the tiles
     for (const tile of content.tiles) {
