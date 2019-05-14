@@ -32,7 +32,7 @@
             <div class="nav-link u-cursor-pointer" :class="{ 'active': tab === 'actorsManager' }" @click="tab = 'actorsManager'">Manage actors</div>
           </li>
         </ul>
-        <div v-if="tab === 'elements'">
+        <div v-show="tab === 'elements'">
           <h4>Tiles</h4>
           <canvas
             ref="tiles"
@@ -46,7 +46,7 @@
             @click="onClickActorsCanvas"
           ></canvas>
         </div>
-        <div v-if="tab === 'actorsManager'">
+        <div v-show="tab === 'actorsManager'">
           <div v-for="(actor, index) in stagedActorsAsArray">
             <div class="card mt-1">
               <div class="card-body">
