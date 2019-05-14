@@ -113,10 +113,10 @@ export default class FileMenu extends Vue {
       collidable: actor.collidable,
       visible: actor.visible,
       updatable: actor.updatable,
-      states: actor.states.map(state => ({
-        key: state.key,
-        value: this.$store.getters.animationsMapper.getValue(state.value)
-      }))
+      states: actor.states.reduce( (acc, curr) => ({
+        ...acc,
+        [curr.key]: this.$store.getters.animationsMapper.getValue(curr.value)
+      }), {})
     }));
 
     // Then, let's record the maps
@@ -223,7 +223,7 @@ export default class FileMenu extends Vue {
         collidable: actor.collidable,
         visible: actor.visible,
         updatable: actor.updatable,
-        states: actor.states
+        states: Object.entries(actor.states).map(([key, value]) => ({ key, value }))
       });
     }
 
