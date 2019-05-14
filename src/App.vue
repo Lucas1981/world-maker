@@ -25,6 +25,9 @@
         <li class="nav-item">
           <router-link class="nav-link" :class="{ 'active': activeLink === '/maps' }" to="/maps">Maps</router-link>
         </li>
+        <li class="nav-item">
+          <router-link class="nav-link" :class="{ 'active': activeLink === '/sounds' }" to="/sounds">Sounds</router-link>
+        </li>
       </ul>
 
       <div v-if="!isLoading">

@@ -94,6 +94,12 @@ export default class FileMenu extends Vue {
       y: frame.y
     }));
 
+    // Then, let's record the sounds
+    world.sounds = this.$store.getters.sounds.reduce( (acc, curr) => ({
+      ...acc,
+      [curr.key]: curr.sound
+    }), {});
+
     // Next, let's record the animations
     world.animations = this.$store.getters.animations.map(animation => ({
       // Make sure to convert back to the actual frame indices
@@ -172,6 +178,8 @@ export default class FileMenu extends Vue {
     this.$store.commit('setLoading', true);
     await this.$nextTick();
 
+    // console.log(content);
+
     // Clear out what we have to be sure we start fresh
     this.$store.commit('clearAll');
     this.$store.commit('setSourceImage', new Image());
@@ -200,6 +208,9 @@ export default class FileMenu extends Vue {
     this.$store.commit('setUnit', content.config.unit);
     this.$store.commit('setGridWidth', content.config.gridWidth);
     this.$store.commit('setGridHeight', content.config.gridHeight);
+
+    // Then, populate the sounds
+    Object.entries(content.sounds).map(([key, sound]) => this.$store.commit('addSound', { key, sound }));
 
     // Then, populate the frames
     for (const frame of content.frames) {

@@ -15,31 +15,36 @@ export default new Router({
       // Frames
       path: '/frames',
       name: 'frames',
-      component: () => import(/* webpackChunkName: "about" */ './views/Frames.vue'),
+      component: () => import(/* webpackChunkName: "frames" */ './views/Frames.vue'),
     },
     {
       // Animations
       path: '/animations',
       name: 'animations',
-      component: () => import(/* webpackChunkName: "about" */ './views/Animations.vue'),
+      component: () => import(/* webpackChunkName: "animations" */ './views/Animations.vue'),
     },
     {
       // Tiles
       path: '/tiles',
       name: 'tiles',
-      component: () => import(/* webpackChunkName: "about" */ './views/Tiles.vue'),
+      component: () => import(/* webpackChunkName: "tiles" */ './views/Tiles.vue'),
     },
     {
       // Actors
       path: '/actors',
       name: 'actors',
-      component: () => import(/* webpackChunkName: "about" */ './views/Actors.vue'),
+      component: () => import(/* webpackChunkName: "actors" */ './views/Actors.vue'),
     },
     {
       // Maps
       path: '/maps',
       name: 'maps',
-      component: () => import(/* webpackChunkName: "about" */ './views/Maps.vue'),
+      component: () => import(/* webpackChunkName: "maps" */ './views/Maps.vue'),
     },
+    {
+      path: '/sounds',
+      name: 'sounds',
+      component: () => import(/* webpackChunkName: "maps" */ './views/Sounds.vue')
+    }
   ],
 });
