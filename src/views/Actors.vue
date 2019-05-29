@@ -54,7 +54,18 @@
                     <button class="btn btn-danger btn-sm mt-1" @click="deleteState(index, stateIndex)">Delete</button>
                   </div>
                   <div class="col-6">
-                    <input type="text" class="form-control" v-model="state.key" />
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Key</span>
+                      </div>
+                      <input type="text" class="form-control" v-model="state.key" />
+                    </div>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Tags</span>
+                      </div>
+                      <input type="text" class="form-control" v-model="state.value.tags" />
+                    </div>
                   </div>
                   <div class="col-3">
                     <canvas :ref="`prev-anim-${index}${separator}${stateIndex}`" style="background: #f8f8f8;"></canvas>
@@ -231,9 +242,9 @@ export default class Tiles extends Base {
   private drawCanvases(elapsedTime) {
     for (let i: number = 0; i < this.actors.length; i++) {
       for (let j: number = 0; j < this.actors[i].states.length; j++) {
-        if(this.actors[i].states[j].value !== null) {
+        if(this.actors[i].states[j].value.animationKey !== null) {
           const key = `prev-anim-${i}${separator}${j}`;
-          const animKey = this.actors[i].states[j].value;
+          const animKey = this.actors[i].states[j].value.animationKey;
           const animation = this.animationsMapper.getValue(animKey);
           if (typeof animation === 'number') {
             this.canvases[key].fillCanvas();

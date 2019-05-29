@@ -19,7 +19,13 @@ Plans for expansion:
 - Add a button that automatically maps the selected grid density to frames (with a from/to limit)
 - Add a button that automatically maps the frames to animations (with a from/to limit)
 - Make a color that must be filtered selectable
-- Create a way to include sound management
+- Offer centering of transparency-padded selection
+- Flood map with tile
+- Flood map row with tile
+- Flood map column with tile
+- Add/remove map column
+- Add/remove map row
+- Add multiple grid layers for tiles
 
 ## Project setup
 ```

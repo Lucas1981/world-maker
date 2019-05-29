@@ -240,7 +240,7 @@ export default class Maps extends Base {
         typeof actorValue !== 'number' ||
         this.actors[actorValue].states.length === 0
       ) continue;
-      const animKey: number = this.actors[actorValue].states[0].value;
+      const animKey: number = this.actors[actorValue].states[0].value.animationKey;
       const animation: any = this.animationsMapper.getValue(animKey);
       if (typeof animation === 'number') {
         this.animations[animation].draw(
@@ -278,7 +278,7 @@ export default class Maps extends Base {
     if(this.animations.length === 0) return;
     for(let i: number = 0; i < this.actors.length; i++) {
       if (this.actors[i].states.length === 0) continue;
-      const animKey: number = this.actors[i].states[0].value;
+      const animKey: number = this.actors[i].states[0].value.animationKey;
       const animation: any = this.animationsMapper.getValue(animKey);
       if (typeof animation === 'number') {
         this.animations[animation].draw(

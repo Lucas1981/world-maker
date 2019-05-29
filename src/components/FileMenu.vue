@@ -114,6 +114,7 @@ export default class FileMenu extends Vue {
     }));
 
     // Next, let's record the actors
+    console.log(this.$store.getters.actors);
     world.actors = this.$store.getters.actors.map(actor => ({
       name: actor.name,
       collidable: actor.collidable,
@@ -121,7 +122,10 @@ export default class FileMenu extends Vue {
       updatable: actor.updatable,
       states: actor.states.reduce( (acc, curr) => ({
         ...acc,
-        [curr.key]: this.$store.getters.animationsMapper.getValue(curr.value)
+        [curr.key]: {
+          animationKey: this.$store.getters.animationsMapper.getValue(curr.value.animationKey),
+          tags: curr.value.tags.replace(/ /g, '').split(',') || []
+        }
       }), {})
     }));
 
@@ -232,7 +236,14 @@ export default class FileMenu extends Vue {
         collidable: actor.collidable,
         visible: actor.visible,
         updatable: actor.updatable,
-        states: Object.entries(actor.states).map(([key, value]) => ({ key, value }))
+        states: Object.entries(actor.states).map(([key, value]) => (
+          {
+            key, value: {
+              ...value,
+              tags: value.tags.join(',')
+            }
+          }
+        ))
       });
     }
 

@@ -116,7 +116,10 @@ export default new Vuex.Store({
       const states = state.actors[index].states;
       state.actors[index].states.push({
         key: `state${index}-${states.length}`,
-        value: null
+        value: {
+          animationKey: null,
+          tags: ''
+        }
       });
     },
     removeState(state, { index, stateIndex }: object): void {
@@ -191,7 +194,7 @@ export default new Vuex.Store({
     },
     addActorAnimation(state, { actorIndex, stateIndex, animation }: object): void {
       const key: number = state.animationsMapper.getKey(animation);
-      state.actors[actorIndex].states[stateIndex].value = key;
+      state.actors[actorIndex].states[stateIndex].value.animationKey = key;
     },
     addTileAnimation(state, { tileIndex, animation }: object): void {
       const key: number = state.animationsMapper.getKey(animation);
