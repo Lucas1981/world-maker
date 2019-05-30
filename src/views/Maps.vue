@@ -163,7 +163,7 @@ export default class Maps extends Base {
     return index;
   }
 
-  public getActorType(type: number): void {
+  public getActorType(type: any): void {
     const key: number = this.actorsMapper.getKey(type);
     return this.actors[key].name;
   }

@@ -114,7 +114,6 @@ export default class FileMenu extends Vue {
     }));
 
     // Next, let's record the actors
-    console.log(this.$store.getters.actors);
     world.actors = this.$store.getters.actors.map(actor => ({
       name: actor.name,
       collidable: actor.collidable,

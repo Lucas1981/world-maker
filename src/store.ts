@@ -138,7 +138,10 @@ export default new Vuex.Store({
         updatable = actorOptions.updatable[0].key,
         states = [{
           key: `state${state.actors.length}-0`,
-          value: null
+          value: {
+            animationKey: '',
+            tags: ''
+          }
         }]
       }: object = {}
     ): void {
