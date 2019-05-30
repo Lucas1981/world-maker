@@ -8,6 +8,28 @@ import LinkedList from './classes/LinkedList.ts';
 import Mapper from './classes/Mapper.ts';
 
 const actorOptions = {
+  movable: [
+    { key: 'Movable', value: 'movable' },
+    { key: 'Immovable', value: 'immovable' }
+  ],
+  threat: [
+    { key: 'Harmful', value: 'harmful' },
+    { key: 'Harmless', value: 'harmless' },
+  ],
+  volition: [
+    { key: 'Benevolent', value: 'benevolent' },
+    { key: 'Malevolent', value: 'malevolent' }
+  ],
+  vulnerable: [
+    { key: 'Vulnerable', value: 'vulnerable' },
+    { key: 'Invulnerable', value: 'invulnerable' }
+  ],
+  actionable: [
+    { key: 'Active', value: 'active' },
+    { key: 'Passive', value: 'passive' }
+  ]
+  /*
+  Other options:
   collidable: [
     { key: 'Solid', value: 'solid'},
     { key: 'Not solid', value: 'notSolid' }
@@ -15,11 +37,7 @@ const actorOptions = {
   visible: [
     { key: 'Visible', value: 'visible' },
     { key: 'Invisible', value: 'invisible' }
-  ],
-  updatable: [
-    { key: 'Movable', value: 'movable' },
-    { key: 'Unmovable', value: 'unmovable' }
-  ]
+  ],*/
 };
 
 Vue.use(Vuex);
@@ -92,7 +110,8 @@ export default new Vuex.Store({
           stagedActors.push({
             actor: actor.type,
             x: actor.x,
-            y: actor.y
+            y: actor.y,
+            direction: actor.direction || ''
           });
         }
       }
@@ -106,18 +125,16 @@ export default new Vuex.Store({
       // No one relies on maps, so we can easily remove them
       state.maps.splice(index, 1);
     },
-    loadActorStatesTemplate(state, { index, stateNames }: object) {
-      state.actors[index].states = stateNames.map(key => ({
-        key,
-        value: null
-      }));
+    loadActorStatesTemplate(state, { index, states }: object) {
+      // We will receive an array of [{ 'name': {}}] that must be turned into [{ key: 'name', value: {} }]
+      state.actors[index].states = states;
+      console.log(state.actors[index].states);
     },
     addState(state, index: number): void {
       const states = state.actors[index].states;
       state.actors[index].states.push({
         key: `state${index}-${states.length}`,
         value: {
-          animationKey: null,
           tags: ''
         }
       });
@@ -133,13 +150,17 @@ export default new Vuex.Store({
       state,
       {
         name = `actor-${state.actors.length + 1}`,
-        collidable = actorOptions.collidable[0].key,
-        visible = actorOptions.visible[0].key,
-        updatable = actorOptions.updatable[0].key,
+        movable = actorOptions.movable[0].value,
+        threat = actorOptions.threat[0].value,
+        volition = actorOptions.volition[0].value,
+        vulnerable = actorOptions.vulnerable[0].value,
+        actionable = actorOptions.actionable[0].value,
+        // collidable = actorOptions.collidable[0].key,
+        // visible = actorOptions.visible[0].key,
+        // updatable = actorOptions.updatable[0].key,
         states = [{
           key: `state${state.actors.length}-0`,
           value: {
-            animationKey: '',
             tags: ''
           }
         }]
@@ -147,9 +168,14 @@ export default new Vuex.Store({
     ): void {
       state.actors.push({
         name,
-        collidable,
-        visible,
-        updatable,
+        movable,
+        threat,
+        volition,
+        vulnerable,
+        actionable,
+        // collidable,
+        // visible,
+        // updatable,
         states
       });
       state.actorsMapper.add(state.actors.length - 1);

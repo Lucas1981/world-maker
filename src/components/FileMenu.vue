@@ -116,10 +116,15 @@ export default class FileMenu extends Vue {
     // Next, let's record the actors
     world.actors = this.$store.getters.actors.map(actor => ({
       name: actor.name,
-      collidable: actor.collidable,
-      visible: actor.visible,
-      updatable: actor.updatable,
-      states: actor.states.reduce( (acc, curr) => ({
+      movable: actor.movable,
+      threat: actor.threat,
+      volition: actor.volition,
+      vulnerable: actor.vulnerable,
+      actionable: actor.actionable,
+      // collidable: actor.collidable,
+      // visible: actor.visible,
+      // updatable: actor.updatable,
+      states: actor.states.reduce((acc, curr) => ({
         ...acc,
         [curr.key]: {
           animationKey: this.$store.getters.animationsMapper.getValue(curr.value.animationKey),
@@ -138,7 +143,8 @@ export default class FileMenu extends Vue {
         actors.push({
           type: this.$store.getters.actorsMapper.getValue(actor.element.actor),
           x: actor.element.x,
-          y: actor.element.y
+          y: actor.element.y,
+          direction: actor.element.direction
         });
       }
 
@@ -232,9 +238,14 @@ export default class FileMenu extends Vue {
     for (const actor of content.actors) {
       this.$store.commit('addActor', {
         name: actor.name,
-        collidable: actor.collidable,
-        visible: actor.visible,
-        updatable: actor.updatable,
+        movable: actor.movable,
+        threat: actor.threat,
+        volition: actor.volition,
+        vulnerable: actor.vulnerable,
+        actionable: actor.actionable,
+        // collidable: actor.collidable,
+        // visible: actor.visible,
+        // updatable: actor.updatable,
         states: Object.entries(actor.states).map(([key, value]) => (
           {
             key, value: {

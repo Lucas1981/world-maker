@@ -25,7 +25,7 @@
                   <span class="input-group-text">{{ key }}</span>
                 </div>
                 <select v-model="actor[key]" class="form-control">
-                  <option v-for="record in value" :bind="record.value">{{ record.key }}</option>
+                  <option v-for="record in value" :bind="record.value" :value="record.value">{{ record.key }}</option>
                 </select>
               </div>
               <div>
@@ -127,7 +127,7 @@ export default class Tiles extends Base {
   }
 
   public saveTemplate(actor) {
-    FileHandler.downloadJsonFile('actor-template.json', actor.states.map(e => e.key));
+    FileHandler.downloadJsonFile('actor-template.json', actor.states);
   }
 
   public loadTemplateProxy(index) {
@@ -136,8 +136,8 @@ export default class Tiles extends Base {
   }
 
   public async loadTemplate(event, index) {
-    const stateNames: string[] = await FileHandler.handleJsonFile(event);
-    this.$store.commit('loadActorStatesTemplate', { index, stateNames });
+    const states: string[] = await FileHandler.handleJsonFile(event);
+    this.$store.commit('loadActorStatesTemplate', { index, states });
     this.$nextTick(() => {
       for (let i = 0; i < this.actors[index].states.length; i++) {
         const key: string = `prev-anim-${index}${separator}${i}`;
