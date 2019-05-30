@@ -52,6 +52,12 @@
               <div class="card-body">
                 <p>Actor {{ index + 1 }} | Type: {{ getActorType(actor.actor) }}</p>
                 <p>x: {{actor.x}} | y: {{actor.y}}</p>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Direction</span>
+                  </div>
+                  <input type="text" class="form-control" v-model="actor.ref.direction" />
+                </div>
                 <p>
                   <button
                     class="btn btn-danger btn-sm"
@@ -200,7 +206,8 @@ export default class Maps extends Base {
       this.maps[this.activeMap].stagedActors.push({
         actor: key,
         x: this.x,
-        y: this.y
+        y: this.y,
+        direction: ''
       });
     }
   }
