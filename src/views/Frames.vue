@@ -37,7 +37,6 @@ export default class Frames extends Base {
   private sourceImageCanvas: Canvas;
   private sourceImageCanvasOffscreen: Canvas;
   private displayCanvas: Canvas;
-  private emptyFrame: Canvas;
   private maxFrames: number;
   public fileName: string = '';
   public step: number;
@@ -48,7 +47,6 @@ export default class Frames extends Base {
     this.maxFrames = Math.pow(parseInt(512 / this.unit), 2);
     this.sourceImageCanvas = new Canvas(512, 512, this.$refs.sourceImageCanvas);
     this.sourceImageCanvasOffscreen = new Canvas(512, 512, null, true);
-    this.emptyFrame = new Canvas(this.unit, this.unit, null, true);
     this.displayCanvas = new Canvas(512, 512, this.$refs.displayCanvas);
 
     if (this.sourceImage.src) {
@@ -66,8 +64,9 @@ export default class Frames extends Base {
     this.displayCanvas.fillCanvas();
     this.drawFrames();
     this.sourceImageCanvas.fillCanvas();
-    this.sourceImageCanvas.drawImage(this.sourceImage);
+    this.sourceImageCanvasOffscreen.clearCanvas();
     this.sourceImageCanvasOffscreen.drawImage(this.sourceImage);
+    this.sourceImageCanvas.drawImage(this.sourceImageCanvasOffscreen.getCanvasElement());
 
     this.handleKeyboardInput(maxX, maxY);
     this.drawRubberBand(this.sourceImageCanvas);
