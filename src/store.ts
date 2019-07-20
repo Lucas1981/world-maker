@@ -111,7 +111,8 @@ export default new Vuex.Store({
             actor: actor.type,
             x: actor.x,
             y: actor.y,
-            direction: actor.direction || ''
+            condition: actor.condition || 0,
+            direction: actor.direction || 0
           });
         }
       }

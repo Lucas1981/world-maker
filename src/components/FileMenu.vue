@@ -144,6 +144,7 @@ export default class FileMenu extends Vue {
           type: this.$store.getters.actorsMapper.getValue(actor.element.actor),
           x: actor.element.x,
           y: actor.element.y,
+          condition: actor.element.condition,
           direction: actor.element.direction
         });
       }

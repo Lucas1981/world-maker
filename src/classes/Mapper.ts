@@ -1,8 +1,11 @@
 export default class Mapper {
-  private map: Map = new Map();
-  private counter: number = 0;
+  private map: Map;
+  private counter: number;
 
-  constructor() {}
+  constructor() {
+    this.map = new Map();
+    this.counter = 0;
+  }
 
   public add(value) {
     this.map.set(this.counter, value);

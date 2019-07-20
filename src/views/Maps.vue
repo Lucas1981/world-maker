@@ -54,9 +54,15 @@
                 <p>x: {{actor.x}} | y: {{actor.y}}</p>
                 <div class="input-group mb-3">
                   <div class="input-group-prepend">
+                    <span class="input-group-text">Condition</span>
+                  </div>
+                  <input type="number" class="form-control" v-model.number="actor.ref.condition" />
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
                     <span class="input-group-text">Direction</span>
                   </div>
-                  <input type="text" class="form-control" v-model="actor.ref.direction" />
+                  <input type="number" class="form-control" v-model.number="actor.ref.direction" />
                 </div>
                 <p>
                   <button
@@ -207,7 +213,8 @@ export default class Maps extends Base {
         actor: key,
         x: this.x,
         y: this.y,
-        direction: ''
+        direction: 0,
+        condition: 0
       });
     }
   }
