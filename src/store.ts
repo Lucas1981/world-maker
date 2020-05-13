@@ -7,6 +7,7 @@ import KeyboardInput from './classes/KeyboardInput.ts';
 import LinkedList from './classes/LinkedList.ts';
 import Mapper from './classes/Mapper.ts';
 
+const debug = false;
 const actorOptions = {
   movable: [
     { key: 'Movable', value: 'movable' },
@@ -61,7 +62,8 @@ export default new Vuex.Store({
     gridWidth: 15,
     gridHeight: 11,
     unit: 0,
-    loading: true
+    loading: true,
+    debug
   },
   getters: {
     world(state): object { return state.world; },
@@ -82,7 +84,8 @@ export default new Vuex.Store({
     gridWidth(state): number { return state.gridWidth; },
     gridHeight(state): number { return state.gridHeight; },
     unit(state): number { return state.unit; },
-    isLoading(state): Boolean { return state.loading; }
+    isLoading(state): Boolean { return state.loading; },
+    debug(state): Boolean { return state.debug; }
   },
   mutations: {
     clearAll(state): void {
@@ -129,7 +132,6 @@ export default new Vuex.Store({
     loadActorStatesTemplate(state, { index, states }: object) {
       // We will receive an array of [{ 'name': {}}] that must be turned into [{ key: 'name', value: {} }]
       state.actors[index].states = states;
-      console.log(state.actors[index].states);
     },
     addState(state, index: number): void {
       const states = state.actors[index].states;

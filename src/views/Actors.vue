@@ -68,7 +68,10 @@
                     </div>
                   </div>
                   <div class="col-3">
-                    <canvas :ref="`prev-anim-${index}${separator}${stateIndex}`" style="background: #f8f8f8;"></canvas>
+                    <canvas
+                      :ref="`prev-anim-${index}${separator}${stateIndex}`"
+                      style="background: #f8f8f8;"
+                    ></canvas>
                   </div>
                 </div>
               </div>
@@ -80,7 +83,10 @@
       </div>
       <div class="col-6">
         <h3>Animations</h3>
-        <canvas ref="displayCanvas"></canvas>
+        <canvas
+          ref="displayCanvas"
+          @click="onClickMapCanvas"
+        ></canvas>
       </div>
     </div>
   </div>

@@ -6,7 +6,10 @@
     <div class="row">
       <div class="col-6">
         <h3>Source canvas</h3>
-        <canvas ref="sourceImageCanvas"></canvas>
+        <canvas
+          ref="sourceImageCanvas"
+          @click="onClickMapCanvas"
+        ></canvas>
         <p>
           Unit: {{ unit }} |
           x: {{ x }} |

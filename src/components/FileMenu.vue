@@ -104,6 +104,7 @@ export default class FileMenu extends Vue {
     world.animations = this.$store.getters.animations.map(animation => ({
       // Make sure to convert back to the actual frame indices
       data: animation.indices.map(key => this.$store.getters.framesMapper.getValue(key)),
+      boundingBox: animation.getBoundingBox(), // This one is generated, so we only need to save it
       loopType: animation.loopType
     }));
 

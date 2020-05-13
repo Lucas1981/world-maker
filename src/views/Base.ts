@@ -39,6 +39,7 @@ export default abstract class Base extends Vue {
   public get actors(): [] { return this.$store.getters.actors; }
   public get actorOptions(): object { return this.$store.getters.actorOptions; }
   public get maps(): [] { return this.$store.getters.maps; }
+  public get debug(): Boolean { return this.$store.getters.debug; }
 
   public destroyed(): void {
     this.isDestroyed = true;
@@ -74,6 +75,11 @@ export default abstract class Base extends Vue {
     if (!this.keyboard.state.left) { this.hasPressed.left = false; }
     if (!this.keyboard.state.right) { this.hasPressed.right = false; }
     if (!this.keyboard.state.space) { this.hasPressed.space = false; }
+  }
+
+  public onClickMapCanvas(element: object): void {
+    this.x = parseInt(element.offsetX / this.unit, 0) * this.unit;
+    this.y = parseInt(element.offsetY / this.unit, 0) * this.unit;
   }
 
   private onSpace(): void {

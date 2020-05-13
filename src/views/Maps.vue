@@ -21,7 +21,11 @@
         </div>
       </div>
       <div class="col-8 text-center">
-        <canvas ref="map" style="background-color:#f8f8f8;"></canvas>
+        <canvas
+          ref="map"
+          style="background-color:#f8f8f8;"
+          @click="onClickMapCanvas"
+        ></canvas>
       </div>
       <div class="col-2">
         <ul class="nav nav-tabs mb-3">

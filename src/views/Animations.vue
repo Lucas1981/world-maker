@@ -3,7 +3,10 @@
     <div class="row">
       <div class="col-6">
         <h3>Frames</h3>
-        <canvas ref="displayCanvas"></canvas>
+        <canvas
+          ref="displayCanvas"
+          @click="onClickMapCanvas"
+        ></canvas>
       </div>
       <div class="col-6">
         <button @click="addAnimation()" class="btn btn-primary" v-blur>Add animation</button>

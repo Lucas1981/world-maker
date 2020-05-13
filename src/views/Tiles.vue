@@ -49,7 +49,13 @@
       </div>
       <div class="col-6">
         <h3>Animations</h3>
-        <canvas ref="displayCanvas"></canvas>
+        <canvas
+          ref="displayCanvas"
+          @click="onClickMapCanvas"
+        ></canvas>
+        <p>
+          <label><input type="checkbox" v-model="showBorderBox" /> Show border box</label>
+        </p>
       </div>
     </div>
   </div>
@@ -70,6 +76,7 @@ export default class Tiles extends Base {
   private canvases: any = {};
   public typeOptions: Array<string> = null;
   public activeSelection: number = -1;
+  public showBorderBox: Boolean = false;
 
   async mounted(): void {
     this.typeOptions = typeOptions;
@@ -149,12 +156,23 @@ export default class Tiles extends Base {
 
   private drawAnimations(elapsedTime: number): void {
     for(let i: number = 0; i < this.animations.length; i++) {
+      const boundingBox = this.animations[i].getBoundingBox();
       this.animations[i].draw(
         this.displayCanvas.getContext(),
         parseInt(i % parseInt(this.displayCanvas.width / this.unit)) * this.unit,
         parseInt(i / parseInt(this.displayCanvas.width / this.unit)) * this.unit,
         elapsedTime
       );
+
+      if (this.showBorderBox || this.debug) {
+        this.displayCanvas.drawRubberBand(
+          (parseInt(i % parseInt(this.displayCanvas.width / this.unit)) * this.unit) + boundingBox.left,
+          (parseInt(i / parseInt(this.displayCanvas.width / this.unit)) * this.unit) + boundingBox.top,
+          this.unit - (boundingBox.right + boundingBox.left),
+          this.unit - (boundingBox.bottom + boundingBox.top),
+          'red'
+        );
+      }
     }
   }
 

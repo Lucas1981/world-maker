@@ -4,6 +4,8 @@ import FramesMapper from './FramesMapper';
 
 export default class Animation {
   private numberOfFrames: number;
+  private boundingBox: any;
+  private mask: any;
 
   constructor(
     private frames: Array<Frame>,
@@ -11,7 +13,9 @@ export default class Animation {
     private indices: Array<number>,
     private loopType: number,
     private framesPerSecond: number,
-  ) { }
+  ) {
+    this.determineBoundingBox();
+  }
 
   public get numberOfFrames() {
     return this.indices.length;
@@ -19,6 +23,7 @@ export default class Animation {
 
   public addIndex(index: number) {
     this.indices.push(index);
+    this.determineBoundingBox();
   }
 
   public getIndices() {
@@ -49,6 +54,38 @@ export default class Animation {
     const mappedIndex = this.framesMapper.getValue(this.indices[index]);
     const frame: Frame = this.frames[mappedIndex];
     return frame;
+  }
+
+  public getBoundingBox() {
+    return this.boundingBox;
+  }
+
+  private determineBoundingBox() {
+    const imageData = null;
+    const frames: Frame[] = [];
+    const boundingBox = {
+      top: Infinity,
+      bottom: Infinity,
+      left: Infinity,
+      right: Infinity
+    };
+
+    // Filter out the frames that are in this animation
+    for (const index of this.indices) {
+      const mappedIndex = this.framesMapper.getValue(index);
+      const frame: Frame = this.frames[mappedIndex];
+      frames.push(frame);
+    }
+
+    // Get the bounding box for the entire animation
+    for (const frame: Frame of frames) {
+      const { top, bottom, left, right } = frame.getBoundingBox();
+      if (top < boundingBox.top) boundingBox.top = top;
+      if (bottom < boundingBox.bottom) boundingBox.bottom = bottom;
+      if (left < boundingBox.left) boundingBox.left = left;
+      if (right < boundingBox.right) boundingBox.right = right;
+    }
+    this.boundingBox = boundingBox;
   }
 
   private determineFrame(elapsedTime: any): number {
