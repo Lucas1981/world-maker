@@ -23,9 +23,9 @@ X - Keep the frame palette fixed
 - Add a button that automatically maps the frames to animations (with a from/to limit)
 - Make a color that must be filtered selectable
 - Offer centering of transparency-padded selection
-- Flood map with tile
-- Flood map row with tile
-- Flood map column with tile
+X - Flood map with tile
+X - Flood map row with tile
+X - Flood map column with tile
 - Add/remove map column
 - Add/remove map row
 - Add multiple grid layers for tiles

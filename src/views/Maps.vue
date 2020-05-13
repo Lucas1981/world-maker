@@ -43,6 +43,11 @@
             style="background-color:#f8f8f8;"
             @click="onClickTilesCanvas"
           ></canvas>
+          <p class="fill-buttons">
+            <button class="btn btn-primary btn-small" @click="fill()">Fill</button>
+            <button class="btn btn-primary btn-small" @click="fillCol()">Fill col</button>
+            <button class="btn btn-primary btn-small" @click="fillRow()">Fill row</button>
+          </p>
           <h4>Actors</h4>
           <canvas
             ref="actors"
@@ -204,9 +209,35 @@ export default class Maps extends Base {
   }
 
   public onSpace(): void {
-    if (this.activeMap === null || this.selectedIndex === -1) return;
     const x: number = parseInt(this.x / this.unit);
     const y: number = parseInt(this.y / this.unit);
+    this.placeTile(x, y);
+  }
+
+  public fill(): void {
+    for (let y = 0; y < this.maps[this.activeMap].grid.length; y++) {
+      for (let x = 0; x < this.maps[this.activeMap].grid[0].length; x++) {
+        this.placeTile(x, y);
+      }
+    }
+  }
+
+  public fillRow(): void {
+    const y: number = parseInt(this.y / this.unit);
+    for (let x = 0; x < this.maps[this.activeMap].grid[0].length; x++) {
+      this.placeTile(x, y);
+    }
+  }
+
+  public fillCol(): void {
+    const x: number = parseInt(this.x / this.unit);
+    for (let y = 0; y < this.maps[this.activeMap].grid.length; y++) {
+      this.placeTile(x, y);
+    }
+  }
+
+  private placeTile(x, y) {
+    if (this.activeMap === null || this.selectedIndex === -1) return;
     if(this.isTileSelected) {
       const key = this.tilesMapper.getKey(this.selectedIndex);
       this.maps[this.activeMap].grid[y][x] = key;
@@ -310,3 +341,11 @@ export default class Maps extends Base {
   }
 };
 </script>
+
+<style>
+.fill-buttons {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 32px;
+}
+</style>
