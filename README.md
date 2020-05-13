@@ -18,7 +18,8 @@ X - Add a grid viewer to the frames screen
 - Add steps and unit size to the frame screen
 X - Add a button that automatically maps the selected grid density to frames (with a from/to limit)
 - Sort the animations inverted
-- Keep the frame palette fixed
+X - Keep the frame palette fixed
+- Don't let keyboard input scroll the animations list
 - Add a button that automatically maps the frames to animations (with a from/to limit)
 - Make a color that must be filtered selectable
 - Offer centering of transparency-padded selection

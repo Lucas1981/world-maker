@@ -10,7 +10,7 @@
       </div>
       <div class="col-6">
         <button @click="addAnimation()" class="btn btn-primary" v-blur>Add animation</button>
-        <div class="animations-wrapper">
+        <div class="animations-wrapper" ref="animationsWrapper">
           <div v-for="(animation, index) in animations">
             <div class="card mt-1">
               <div class="card-body">
@@ -97,17 +97,15 @@ export default class Animations extends Base {
     this.drawRubberBand(this.displayCanvas);
 
     if (!this.isDestroyed) this.request.call(window, this.mainLoop.bind(this));
-  }
 
-  public noScrolling(event) {
-    console.log('noScrolling called');
-    event.stopPropagation();
-    event.preventDefault();
+    this.$refs.firstRow.focus();
   }
 
   public addAnimation() {
     this.$store.commit('addAnimation');
     this.activeSelection = this.animations.length - 1;
+    const element = this.$refs.animationsWrapper;
+    element.scrollTop = element.scrollHeight;
   }
 
   public deleteAnimation(index) {
