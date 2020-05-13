@@ -15,6 +15,10 @@
           x: {{ x }} |
           y: {{ y }}
         </p>
+        <div class="form-check">
+          <input id="show-grid" type="checkbox" class="form-check-input" v-model="showGrid" />
+          <label class="form-check-label" for="show-grid">Show grid</label>
+        </div>
         <p><button @click="commitAllToFrames()" class="btn btn-primary btn-sm" v-blur>Commit all to frames</button></p>
         <p><button @click="flipImage()" class="btn btn-primary btn-sm" v-blur>Flip canvas</button></p>
       </div>
@@ -45,6 +49,11 @@ export default class Frames extends Base {
   public fileName: string = '';
   public step: number;
   public sourceFileName: string;
+  public showGrid: boolean;
+
+  beforeMount() {
+    this.showGrid = false;
+  }
 
   mounted() {
     this.step = this.unit;
@@ -74,6 +83,7 @@ export default class Frames extends Base {
 
     this.handleKeyboardInput(maxX, maxY);
     this.drawRubberBand(this.sourceImageCanvas);
+    if (this.showGrid) this.sourceImageCanvas.drawGrid(512, 512, this.unit);
 
     if (!this.isDestroyed) this.request.call(window, this.mainLoop.bind(this));
   }

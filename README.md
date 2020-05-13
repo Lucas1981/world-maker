@@ -14,9 +14,11 @@ A tricky part was mapping all the frames, animations, tiles and actors. Since yo
 Plans for expansion:
 - Turn some inputs into components
 X - Make any navigable canvas mouse-clickable
-- Add a grid viewer to the frames screen
+X - Add a grid viewer to the frames screen
 - Add steps and unit size to the frame screen
 X - Add a button that automatically maps the selected grid density to frames (with a from/to limit)
+- Sort the animations inverted
+- Keep the frame palette fixed
 - Add a button that automatically maps the frames to animations (with a from/to limit)
 - Make a color that must be filtered selectable
 - Offer centering of transparency-padded selection

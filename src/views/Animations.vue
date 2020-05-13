@@ -10,41 +10,43 @@
       </div>
       <div class="col-6">
         <button @click="addAnimation()" class="btn btn-primary" v-blur>Add animation</button>
-        <div v-for="(animation, index) in animations">
-          <div class="card mt-1">
-            <div class="card-body">
-              <h5 class="card-title">Animation {{ index + 1 }}</h5>
-              <div class="form-check d-inline-block">
-                <input
-                  type="radio"
-                  class="form-check-input"
-                  :id="index"
-                  :value="index"
-                  :checked="activeSelection == index"
-                  v-model="activeSelection"
-                  v-blur
-                />
-                <label>
-                  Active
-                </label>
-              </div>
-              <button class="btn btn-danger ml-2" @click="deleteAnimation(index)" v-blur>Delete</button>
-              <div class="input-group my-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">Loop type</span>
+        <div class="animations-wrapper">
+          <div v-for="(animation, index) in animations">
+            <div class="card mt-1">
+              <div class="card-body">
+                <h5 class="card-title">Animation {{ index + 1 }}</h5>
+                <div class="form-check d-inline-block">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    :id="index"
+                    :value="index"
+                    :checked="activeSelection == index"
+                    v-model="activeSelection"
+                    v-blur
+                  />
+                  <label :for="index">
+                    Active
+                  </label>
                 </div>
-                <select v-model="animation.loopType" class="form-control">
-                  <option v-for="(loopTypeVal, loopTypeKey) in loopTypes" :value="loopTypeVal" :bind="loopTypeKey">{{ loopTypeKey }}</option>
-                </select>
+                <button class="btn btn-danger ml-2" @click="deleteAnimation(index)" v-blur>Delete</button>
+                <div class="input-group my-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Loop type</span>
+                  </div>
+                  <select v-model="animation.loopType" class="form-control">
+                    <option v-for="(loopTypeVal, loopTypeKey) in loopTypes" :value="loopTypeVal" :bind="loopTypeKey">{{ loopTypeKey }}</option>
+                  </select>
+                </div>
+                <img
+                  class="se-frame we-delete-icon"
+                  v-for="frameIndex in animation.indices"
+                  :width="unit"
+                  :height="unit"
+                  :src="getDataURL(frameIndex)"
+                  @click="deleteFrame(index, frameIndex)"
+                />
               </div>
-              <img
-                class="se-frame we-delete-icon"
-                v-for="frameIndex in animation.indices"
-                :width="unit"
-                :height="unit"
-                :src="getDataURL(frameIndex)"
-                @click="deleteFrame(index, frameIndex)"
-              />
             </div>
           </div>
         </div>
@@ -95,6 +97,12 @@ export default class Animations extends Base {
     this.drawRubberBand(this.displayCanvas);
 
     if (!this.isDestroyed) this.request.call(window, this.mainLoop.bind(this));
+  }
+
+  public noScrolling(event) {
+    console.log('noScrolling called');
+    event.stopPropagation();
+    event.preventDefault();
   }
 
   public addAnimation() {
@@ -150,3 +158,14 @@ export default class Animations extends Base {
   }
 }
 </script>
+
+<style>
+.animations-wrapper {
+  position: absolute;
+  top: 40px;
+  height: 100%;
+  left: 0;
+  width: 100%;
+  overflow-y: scroll;
+}
+</style>

@@ -72,6 +72,14 @@ export default class Canvas {
     this.context.stroke();
   }
 
+  public drawGrid(width, height, unit, strokeColor = 'rgba(0, 0, 0, .1)') {
+    for (let x = 0; x < width; x += unit) {
+      for (let y = 0; y < height; y += unit) {
+        this.drawRubberBand(x, y, unit, unit, strokeColor);
+      }
+    }
+  }
+
   public adjustToImageData(img) {
     this.canvasPointer.width = img.width;
     this.canvasPointer.height = img.height;
