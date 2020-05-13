@@ -16,7 +16,7 @@ Plans for expansion:
 X - Make any navigable canvas mouse-clickable
 - Add a grid viewer to the frames screen
 - Add steps and unit size to the frame screen
-- Add a button that automatically maps the selected grid density to frames (with a from/to limit)
+X - Add a button that automatically maps the selected grid density to frames (with a from/to limit)
 - Add a button that automatically maps the frames to animations (with a from/to limit)
 - Make a color that must be filtered selectable
 - Offer centering of transparency-padded selection

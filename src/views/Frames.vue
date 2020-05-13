@@ -15,6 +15,7 @@
           x: {{ x }} |
           y: {{ y }}
         </p>
+        <p><button @click="commitAllToFrames()" class="btn btn-primary btn-sm" v-blur>Commit all to frames</button></p>
         <p><button @click="flipImage()" class="btn btn-primary btn-sm" v-blur>Flip canvas</button></p>
       </div>
       <div class="col-6">
@@ -77,6 +78,14 @@ export default class Frames extends Base {
     if (!this.isDestroyed) this.request.call(window, this.mainLoop.bind(this));
   }
 
+  public commitAllToFrames() {
+    for (let x = 0; x < 512; x += this.unit) {
+      for (let y = 0; y < 512; y += this.unit) {
+        this.addFrame(x, y);
+      }
+    }
+  }
+
   public flipImage() {
     const source = new Canvas(this.sourceImage.width, this.sourceImage.height, null, true);
     source.drawImage(this.sourceImage);
@@ -128,13 +137,13 @@ export default class Frames extends Base {
   }
 
   private onSpace(): void {
-    this.addFrame();
+    this.addFrame(this.x, this.y);
   }
 
-  private addFrame(): void {
+  private addFrame(x, y): void {
     const framesLength: number = this.frames.length < this.maxFrames ? this.frames.length : this.maxFrames - 1;
-    const sx: number = parseInt(this.x / this.unit) * this.unit;
-    const sy: number = parseInt(this.y / this.unit) * this.unit;
+    const sx: number = parseInt(x / this.unit) * this.unit;
+    const sy: number = parseInt(y / this.unit) * this.unit;
     const dx: number = (framesLength * this.unit) % this.canvas.width;
     const dy: number = parseInt((framesLength * this.unit) / this.canvas.width) * this.unit;
 
