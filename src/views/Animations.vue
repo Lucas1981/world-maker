@@ -97,8 +97,6 @@ export default class Animations extends Base {
     this.drawRubberBand(this.displayCanvas);
 
     if (!this.isDestroyed) this.request.call(window, this.mainLoop.bind(this));
-
-    this.$refs.firstRow.focus();
   }
 
   public addAnimation() {
