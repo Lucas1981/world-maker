@@ -61,6 +61,8 @@ export default new Vuex.Store({
     framesMapper: null,
     gridWidth: 15,
     gridHeight: 11,
+    cameraWidth: 15,
+    cameraHeight: 11,
     unit: 0,
     loading: true,
     debug
@@ -83,6 +85,8 @@ export default new Vuex.Store({
     actorOptions(): object { return actorOptions; },
     gridWidth(state): number { return state.gridWidth; },
     gridHeight(state): number { return state.gridHeight; },
+    cameraWidth(state): number { return state.cameraWidth; },
+    cameraHeight(state): number { return state.cameraHeight; },
     unit(state): number { return state.unit; },
     isLoading(state): Boolean { return state.loading; },
     debug(state): Boolean { return state.debug; }
@@ -324,6 +328,12 @@ export default new Vuex.Store({
     setGridHeight(state, gridHeight: number) {
       state.gridHeight = gridHeight;
     },
+    setCameraWidth(state, cameraWidth: number) {
+      state.cameraWidth = cameraWidth;
+    },
+    setCameraHeight(state, cameraHeight: number) {
+      state.cameraHeight = cameraHeight;
+    },
     setUnit(state, unit: number): void {
       state.unit = unit;
     },
@@ -332,6 +342,6 @@ export default new Vuex.Store({
     },
     setSounds(state, sounds: object): void {
       state.sounds = sounds;
-    }
+    },
   },
 });

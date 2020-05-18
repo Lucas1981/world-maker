@@ -26,6 +26,8 @@ export default abstract class Base extends Vue {
   public get unit(): number { return this.$store.getters.unit; }
   public get gridWidth(): number { return this.$store.getters.gridWidth; }
   public get gridHeight(): number { return this.$store.getters.gridHeight; }
+  public get cameraWidth(): number { return this.$store.getters.cameraWidth; }
+  public get cameraHeight(): number { return this.$store.getters.cameraHeight; }
   public get frames(): Frame[] { return this.$store.getters.frames; }
   public get framesMapper(): Mapper { return this.$store.getters.framesMapper; }
   public get animationsMapper(): Mapper { return this.$store.getters.animationsMapper; }
@@ -39,7 +41,7 @@ export default abstract class Base extends Vue {
   public get actors(): [] { return this.$store.getters.actors; }
   public get actorOptions(): object { return this.$store.getters.actorOptions; }
   public get maps(): [] { return this.$store.getters.maps; }
-  public get debug(): Boolean { return this.$store.getters.debug; }
+  public get debug(): boolean { return this.$store.getters.debug; }
 
   public destroyed(): void {
     this.isDestroyed = true;
