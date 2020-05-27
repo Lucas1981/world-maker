@@ -78,8 +78,17 @@ export default class Animations extends Base {
   public loopTypes: object = loopTypes;
 
   mounted() {
+    // Keyboard navigates frames but also scrolls the animations
+    // when the collection is too large. Since keyboard has no other
+    // function, we might as well disable it here
+    this.enableKeyboardPreventDefault();
     this.displayCanvas = new Canvas(512, 512, this.$refs.displayCanvas);
     if (this.canvas !== null) this.mainLoop();
+  }
+
+  beforeDestroy() {
+    // Make sure to enable keyboard default again for components that might need it
+    this.disableKeyboardPreventDefault();
   }
 
   private mainLoop() {

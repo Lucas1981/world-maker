@@ -33,6 +33,7 @@ const state = () => ({
 
 export default class KeyboardInput {
   private _state;
+  private preventDefault: boolean = false;
 
   constructor() {
     document.addEventListener('keydown', this.keyDownFunction.bind(this));
@@ -53,9 +54,15 @@ export default class KeyboardInput {
     document.removeEventListener('keyup', this.keyUpFunction.bind(this));
   }
 
+  public setPreventDefault(preventDefault) {
+    this.preventDefault = preventDefault;
+  }
+
   private keyDownFunction(e) {
 
     const release = e;
+
+    if (this.preventDefault) e.preventDefault();
 
     switch (release.keyCode) {
       case keyUp:

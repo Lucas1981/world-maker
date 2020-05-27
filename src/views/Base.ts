@@ -43,6 +43,14 @@ export default abstract class Base extends Vue {
   public get maps(): [] { return this.$store.getters.maps; }
   public get debug(): boolean { return this.$store.getters.debug; }
 
+  public enableKeyboardPreventDefault() {
+    this.keyboard.setPreventDefault(true);
+  }
+
+  public disableKeyboardPreventDefault() {
+    this.keyboard.setPreventDefault(false);
+  }
+
   public destroyed(): void {
     this.isDestroyed = true;
   }
