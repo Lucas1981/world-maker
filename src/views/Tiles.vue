@@ -4,6 +4,7 @@
       <div class="col-6">
         <h3>Tiles</h3>
         <button @click="addTile()" class="btn btn-primary" v-blur>Add tile</button>
+        <button @click="addAllTiles()" class="btn btn-primary u-margin-left-8" v-blur>Anim2Tiles</button>
         <div class="row">
           <div v-for="(tile, index) in tiles" class="col-6">
           <div class="card mt-1">
@@ -113,13 +114,24 @@ export default class Tiles extends Base {
     });
   }
 
-  public addTile(): void {
+  public async addAllTiles(): void {
+    for (let x = 0; x < 512; x += this.unit) {
+      for(let y = 0; y < 512; y += this.unit) {
+        const dx: number = parseInt(x / this.unit);
+        const dy: number = parseInt(y / this.unit);
+
+        await this.addTile();
+        this.addAnimation(dx, dy);
+      }
+    }
+  }
+
+  public async addTile(): void {
     this.$store.commit('addTile')
-    this.$nextTick(() => {
-      const key: string = `prev-anim-${this.tiles.length - 1}`;
-      this.canvases[key] = new Canvas(this.unit, this.unit, this.$refs[key][0]);
-      this.activeSelection = this.tiles.length - 1;
-    });
+    await this.$nextTick();
+    const key: string = `prev-anim-${this.tiles.length - 1}`;
+    this.canvases[key] = new Canvas(this.unit, this.unit, this.$refs[key][0]);
+    this.activeSelection = this.tiles.length - 1;
   }
 
   public removeTile(index: number): void {
@@ -136,16 +148,20 @@ export default class Tiles extends Base {
   }
 
   private onSpace(): void {
-    this.addAnimation();
+    this.handleAddAnimation();
   }
 
-  private addAnimation(): void {
-    // Don't bother if no selection has been activated
-    if (this.activeSelection === -1) return;
-
+  private handleAddAnimation() {
     // First get the index based on our coordinates
     const dx: number = parseInt(this.x / this.unit);
     const dy: number = parseInt(this.y / this.unit);
+    this.addAnimation(dx, dy);
+  }
+
+  private addAnimation(dx: number, dy: number): void {
+    // Don't bother if no selection has been activated
+    if (this.activeSelection === -1) return;
+
     const index: number = dx + (parseInt(this.canvas.width / this.unit) * dy);
 
     // Don't bother if the index doesn't refer to an animation
@@ -194,3 +210,9 @@ export default class Tiles extends Base {
   }
 }
 </script>
+
+<style>
+.u-margin-left-8 {
+  margin-left: 8px;
+}
+</style>
