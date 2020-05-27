@@ -2,7 +2,15 @@
   <div class="animations">
     <div class="row">
       <div class="col-6">
-        <h3>Frames</h3>
+        <div class="u-flex u-margin-bottom-8">
+          <h3>Frames</h3>
+          <button
+            class="btn btn-primary btn-sm u-margin-left-8"
+            @click="allFramesToAnimations()"
+          >
+            Frames2Anim
+          </button>
+        </div>
         <canvas
           ref="displayCanvas"
           @click="onClickMapCanvas"
@@ -108,6 +116,18 @@ export default class Animations extends Base {
     if (!this.isDestroyed) this.request.call(window, this.mainLoop.bind(this));
   }
 
+  public allFramesToAnimations() {
+    for (let x = 0; x < 512; x += this.unit) {
+      for (let y = 0; y < 512; y += this.unit) {
+        const dx: number = parseInt(x / this.unit);
+        const dy: number = parseInt(y / this.unit);
+
+        this.addAnimation();
+        this.addFrame(dx, dy);
+      }
+    }
+  }
+
   public addAnimation() {
     this.$store.commit('addAnimation');
     this.activeSelection = this.animations.length - 1;
@@ -128,10 +148,14 @@ export default class Animations extends Base {
     }
   }
 
-  public addFrame() {
+  public handleAddFrame() {
     // First get the index based on our coordinates
     const dx: number = parseInt(this.x / this.unit);
     const dy: number = parseInt(this.y / this.unit);
+    this.addFrame(dx, dy);
+  }
+
+  private addFrame(dx, dy) {
     const index: number = dx + (parseInt(this.canvas.width / this.unit) * dy);
 
     // Check if we want to commit a known frame
@@ -159,7 +183,7 @@ export default class Animations extends Base {
   }
 
   private onSpace() {
-    this.addFrame();
+    this.handleAddFrame();
   }
 }
 </script>
@@ -172,5 +196,21 @@ export default class Animations extends Base {
   left: 0;
   width: 100%;
   overflow-y: scroll;
+}
+
+.u-flex {
+  display: flex;
+}
+
+.u-justify {
+  justify-content: space-between;
+}
+
+.u-margin-bottom-8 {
+  margin-bottom: 8px;
+}
+
+.u-margin-left-8 {
+  margin-left: 8px;
 }
 </style>
