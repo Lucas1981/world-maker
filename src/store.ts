@@ -63,6 +63,8 @@ export default new Vuex.Store({
     gridHeight: 11,
     cameraWidth: 15,
     cameraHeight: 11,
+    cameraX: 0,
+    cameraY: 0,
     unit: 0,
     loading: true,
     debug
@@ -87,9 +89,11 @@ export default new Vuex.Store({
     gridHeight(state): number { return state.gridHeight; },
     cameraWidth(state): number { return state.cameraWidth; },
     cameraHeight(state): number { return state.cameraHeight; },
+    cameraX(state): number { return state.cameraX; },
+    cameraY(state): number { return state.cameraY; },
     unit(state): number { return state.unit; },
-    isLoading(state): Boolean { return state.loading; },
-    debug(state): Boolean { return state.debug; }
+    isLoading(state): boolean { return state.loading; },
+    debug(state): boolean { return state.debug; }
   },
   mutations: {
     clearAll(state): void {
@@ -333,6 +337,12 @@ export default new Vuex.Store({
     },
     setCameraHeight(state, cameraHeight: number) {
       state.cameraHeight = cameraHeight;
+    },
+    setCameraX(state, cameraX: number) {
+      state.cameraX = cameraX;
+    },
+    setCameraY(state, cameraY: number) {
+      state.cameraY = cameraY;
     },
     setUnit(state, unit: number): void {
       state.unit = unit;

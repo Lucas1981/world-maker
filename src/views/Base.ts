@@ -28,6 +28,8 @@ export default abstract class Base extends Vue {
   public get gridHeight(): number { return this.$store.getters.gridHeight; }
   public get cameraWidth(): number { return this.$store.getters.cameraWidth; }
   public get cameraHeight(): number { return this.$store.getters.cameraHeight; }
+  public get cameraX(): number { return this.$store.getters.cameraX; }
+  public get cameraY(): number { return this.$store.getters.cameraY; }
   public get frames(): Frame[] { return this.$store.getters.frames; }
   public get framesMapper(): Mapper { return this.$store.getters.framesMapper; }
   public get animationsMapper(): Mapper { return this.$store.getters.animationsMapper; }

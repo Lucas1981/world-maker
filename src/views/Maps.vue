@@ -116,15 +116,15 @@ export default class Maps extends Base {
 
   mounted() {
     this.start = new Date();
-    this.mapCanvas = new Canvas(this.unit * this.gridWidth, this.unit * this.gridHeight, this.$refs.map);
+    this.mapCanvas = new Canvas(this.unit * this.cameraWidth, this.unit * this.cameraHeight, this.$refs.map);
     this.tilesCanvas = new Canvas(256, 256, this.$refs.tiles);
     this.actorsCanvas = new Canvas(256, 384, this.$refs.actors);
     this.mainLoop();
   }
 
   public mainLoop(): void {
-    const maxX: number = this.mapCanvas.width - this.unit;
-    const maxY: number = this.mapCanvas.height - this.unit;
+    const maxX: number = (this.gridWidth - 1) * this.unit;
+    const maxY: number = (this.gridHeight - 1) * this.unit;
     const now: Date = new Date();
     const elapsedTime: number = now - this.start;
 
@@ -132,6 +132,7 @@ export default class Maps extends Base {
     this.drawAvailableTiles(elapsedTime);
     this.drawAvailableActors(elapsedTime);
     this.handleKeyboardInput(maxX, maxY);
+    this.determineCameraPosition();
     if (this.activeMap !== null) this.drawGrid(elapsedTime);
     if(this.activeMap !== null) this.drawStagedActors(elapsedTime);
     this.drawRubberBand(this.mapCanvas);
@@ -146,6 +147,18 @@ export default class Maps extends Base {
     }
 
     if (!this.isDestroyed) this.request.call(window, this.mainLoop.bind(this));
+  }
+
+  // We overload this one here because we need to take into account the
+  // camera position
+  private drawRubberBand(canvas: Canvas, color: string = 'orange'): void {
+    canvas.drawRubberBand(
+      parseInt((this.x - this.cameraX) / this.unit, 10) * this.unit,
+      parseInt((this.y - this.cameraY) / this.unit, 10) * this.unit,
+      this.unit,
+      this.unit,
+      color
+    );
   }
 
   public addMap(): void {
@@ -175,6 +188,32 @@ export default class Maps extends Base {
   public onClickActorsCanvas(element: object): void {
     this.selectedIndex = this.getAnimationIndex(element);
     this.isTileSelected = false;
+  }
+
+  private determineCameraPosition() {
+    // Set up the values we need to calculate
+    const halfUnit = this.unit / 2;
+    const totalFieldWidth = this.gridWidth * this.unit;
+    const totalFieldHeight = this.gridHeight * this.unit;
+    const distancePlayerToLeft = this.x; // the left edge is 0, so the x is all we need
+    const distancePlayerToRight = totalFieldWidth - this.x;
+    const distancePlayerToTop = this.y;
+    const distancePlayerToBottom = totalFieldHeight - this.y;
+    const maximumCameraWidth = this.cameraWidth / 2 * this.unit;
+    const maximumCameraHeight = this.cameraHeight / 2 * this.unit;
+
+    // Let's assume all is well and we can just go ahead
+    let cameraX = this.x - maximumCameraWidth - halfUnit;
+    let cameraY = this.y - maximumCameraHeight - halfUnit;
+
+    // Compare values and make necessary adjustments
+    if (distancePlayerToLeft < maximumCameraWidth) cameraX = 0;
+    if (distancePlayerToRight < maximumCameraWidth) cameraX = totalFieldWidth - (this.cameraWidth * this.unit);
+    if (distancePlayerToTop < maximumCameraHeight) cameraY = 0;
+    if (distancePlayerToBottom < maximumCameraHeight) cameraY = totalFieldHeight - (this.cameraHeight * this.unit);
+
+    this.$store.commit('setCameraX', cameraX);
+    this.$store.commit('setCameraY', cameraY);
   }
 
   private getAnimationIndex(element: object): number {
@@ -259,9 +298,11 @@ export default class Maps extends Base {
     if(this.animations.length === 0) return;
     this.mapCanvas.fillCanvas();
     const grid: Array = this.maps[this.activeMap].grid;
-    for (let y: number = 0; y < grid.length; y++) {
-      for (let x: number = 0; x < grid[y].length; x++) {
-        const tileValue: any = this.tilesMapper.getValue(grid[y][x]);
+    const cameraX = parseInt(this.cameraX / this.unit);
+    const cameraY = parseInt(this.cameraY / this.unit);
+    for (let y: number = 0; y < this.cameraHeight; y++) {
+      for (let x: number = 0; x < this.cameraWidth; x++) {
+        const tileValue: any = this.tilesMapper.getValue(grid[y + cameraY][x + cameraX]);
         if (
           typeof tileValue !== 'number' ||
           !('animation' in this.tiles[tileValue])
@@ -287,15 +328,21 @@ export default class Maps extends Base {
       const actorValue: number = this.actorsMapper.getValue(actor.element.actor);
       if (
         typeof actorValue !== 'number' ||
-        this.actors[actorValue].states.length === 0
+        this.actors[actorValue].states.length === 0 ||
+        !(
+          actor.element.x > this.cameraX &&
+          actor.element.x < this.cameraX + (this.cameraWidth * this.unit) &&
+          actor.element.y > this.cameraY &&
+          actor.element.y < this.cameraY + (this.cameraHeight * this.unit)
+        )
       ) continue;
       const animKey: number = this.actors[actorValue].states[0].value.animationKey;
       const animation: any = this.animationsMapper.getValue(animKey);
       if (typeof animation === 'number') {
         this.animations[animation].draw(
           this.mapCanvas.getContext(),
-          actor.element.x,
-          actor.element.y,
+          actor.element.x - this.cameraX,
+          actor.element.y - this.cameraY,
           elapsedTime
         );
       }
