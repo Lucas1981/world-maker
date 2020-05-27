@@ -19,9 +19,10 @@ X - Add a grid viewer to the frames screen
 X - Add a button that automatically maps the selected grid density to frames (with a from/to limit)
 - Sort the animations inverted
 X - Keep the frame palette fixed
-- Don't let keyboard input scroll the animations list
-- Add a button that automatically maps the frames to animations (with a from/to limit)
-- Make a color that must be filtered selectable
+X - Don't let keyboard input scroll the animations list
+X - Add a button that automatically maps the frames to animations
+- Set from/to limiter on frames to animations mappe
+X - Make a color that must be filtered selectable
 - Offer centering of transparency-padded selection
 X - Flood map with tile
 X - Flood map row with tile
