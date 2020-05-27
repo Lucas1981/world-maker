@@ -15,8 +15,26 @@
           x: {{ x }} |
           y: {{ y }}
         </p>
+        <div>
+          <label for="filter-color">Filter color</label>
+          <input
+            type="color"
+            for="filter-color"
+            id="filter-color"
+            v-model="filterColor"
+          />
+          <button
+            class="btn btn-primary btn-sm"
+            @click="applyFilterColor()"
+          >Apply filter color</button>
+        </div>
         <div class="form-check">
-          <input id="show-grid" type="checkbox" class="form-check-input" v-model="showGrid" />
+          <input
+            id="show-grid"
+            type="checkbox"
+            class="form-check-input"
+            v-model="showGrid"
+          />
           <label class="form-check-label" for="show-grid">Show grid</label>
         </div>
         <p><button @click="commitAllToFrames()" class="btn btn-primary btn-sm" v-blur>Commit all to frames</button></p>
@@ -50,6 +68,7 @@ export default class Frames extends Base {
   public step: number;
   public sourceFileName: string;
   public showGrid: boolean;
+  public filterColor: any = '#000000';
 
   beforeMount() {
     this.showGrid = false;
@@ -115,6 +134,32 @@ export default class Frames extends Base {
     }
     destContext.putImageData(destImageData, 0, 0);
     this.sourceImage.src = destCanvas.getDataURL();
+  }
+
+  public applyFilterColor() {
+    const rgb = this.filterColor
+      .substr(1) // Ditch the hashtag
+      .match(/(..?)/g) // Split up into pairs of two
+      .map(e => parseInt(e, 16)); // Convert hex2dec
+
+    const source = new Canvas(this.sourceImage.width, this.sourceImage.height, null, true);
+    source.drawImage(this.sourceImage);
+    const sourceContext = source.getContext();
+    const sourceImageData = source.getImageData();
+    const sourceData = sourceImageData.data;
+    for (let i = 0; i < sourceData.length; i += 4) {
+      // Is this the color we want to filter out?
+      if (
+        sourceData[i + 0] === rgb[0] &&
+        sourceData[i + 1] === rgb[1] &&
+        sourceData[i + 2] === rgb[2]
+      ) {
+        // Then set opacity to zero
+        sourceData[i + 3] = 0;
+      }
+    }
+    sourceContext.putImageData(sourceImageData, 0, 0);
+    this.sourceImage.src = source.getDataURL();
   }
 
   public async handleFile(event: object): void {
