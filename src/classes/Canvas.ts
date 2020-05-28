@@ -80,6 +80,22 @@ export default class Canvas {
     }
   }
 
+  public revealOpacityMask(sourceCanvas: Canvas) {
+    const sourceImageData = sourceCanvas.getImageData();
+    const sourceData = sourceImageData.data;
+    const imageData = this.getImageData();
+    const data = imageData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+      const col = sourceData[i + 3] === 0 ? 255 : 0;
+      data[i + 0] = col;
+      data[i + 1] = col;
+      data[i + 2] = col;
+      data[i + 3] = 255;
+    }
+    this.context.putImageData(imageData, 0, 0);
+  }
+
   public adjustToImageData(img) {
     this.canvasPointer.width = img.width;
     this.canvasPointer.height = img.height;

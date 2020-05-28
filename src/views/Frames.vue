@@ -37,6 +37,15 @@
           />
           <label class="form-check-label" for="show-grid">Show grid</label>
         </div>
+        <div class="form-check">
+          <input
+            id="show-opacity-mask"
+            type="checkbox"
+            class="form-check-input"
+            v-model="showOpacityMask"
+          />
+          <label class="form-check-label" for="show-opacity-mask">Show opacity mask</label>
+        </div>
         <p><button @click="commitAllToFrames()" class="btn btn-primary btn-sm" v-blur>Commit all to frames</button></p>
         <p><button @click="flipImage()" class="btn btn-primary btn-sm" v-blur>Flip canvas</button></p>
       </div>
@@ -67,7 +76,8 @@ export default class Frames extends Base {
   public fileName: string = '';
   public step: number;
   public sourceFileName: string;
-  public showGrid: boolean;
+  public showGrid: boolean = false;
+  public showOpacityMask: boolean = false;
   public filterColor: any = '#000000';
 
   beforeMount() {
@@ -98,7 +108,11 @@ export default class Frames extends Base {
     this.sourceImageCanvas.fillCanvas();
     this.sourceImageCanvasOffscreen.clearCanvas();
     this.sourceImageCanvasOffscreen.drawImage(this.sourceImage);
-    this.sourceImageCanvas.drawImage(this.sourceImageCanvasOffscreen.getCanvasElement());
+    if (this.showOpacityMask) {
+      this.sourceImageCanvas.revealOpacityMask(this.sourceImageCanvasOffscreen);
+    } else {
+      this.sourceImageCanvas.drawImage(this.sourceImageCanvasOffscreen.getCanvasElement());
+    }
 
     this.handleKeyboardInput(maxX, maxY);
     this.drawRubberBand(this.sourceImageCanvas);
