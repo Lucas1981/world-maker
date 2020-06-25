@@ -1,8 +1,18 @@
 import Canvas from './Canvas';
 
 export default class Frame {
-  private boundingBox: any;
-  private mask: any;
+  private boundingBox: any = {
+    top: null,
+    bottom: null,
+    left: null,
+    right: null,
+  };
+  private contour: any = {
+    top: [],
+    bottom: [],
+    left: [],
+    right: [],
+  };
 
   constructor(
     private image: any,
@@ -26,77 +36,85 @@ export default class Frame {
     return this.boundingBox;
   }
 
+  public getContour() {
+    return this.contour;
+  }
+
   private determineBoundingBox() {
     const canvas = new Canvas(this.image.width, this.image.height, null, true);
     const context = canvas.getContext();
     context.drawImage(this.image, 0, 0, this.image.width, this.image.height);
     const imageData = canvas.getImageData().data;
 
-    const left = this.getLeft(imageData);
-    const top = this.getTop(imageData);
-    const bottom = this.getBottom(imageData);
-    const right = this.getRight(imageData);
-
-    const boundingBox = {
-      top, left, bottom, right
-    };
-
-    this.boundingBox = boundingBox;
+    this.processLeft(imageData);
+    this.processTop(imageData);
+    this.processBottom(imageData);
+    this.processRight(imageData);
   }
 
-  private getTop(imageData) {
-    // Do this for every row
-    for (let y = this.y; y < this.y + this.height; y++) {
-      // Check each column of this row
-      for (let x = this.x; x < this.x + this.width; x++) {
-        const base = (x + (y * this.image.width)) * 4;
-        // Do we have a non-transparent pixel? Then this is the top
-        if (imageData[base + 3] !== 0) return y - this.y;
-      }
-    }
-    // By default return the maximum
-    return this.height;
-  }
-
-  private getBottom(imageData) {
-    // Do this for every row, in reverse order
-    for (let y = this.y + this.height; y >= this.y; y--) {
-      // Check each column of this row
-      for (let x = this.x; x < this.x + this.width; x++) {
-        const base = (x + (y * this.image.width)) * 4;
-        // Do we have a non-transparent pixel? Then this is the top
-        if (imageData[base + 3] !== 0) return (this.height + this.y) - y;
-      }
-    }
-    // By default return the minimum
-    return 0;
-  }
-
-  private getLeft(imageData) {
-    // Do this for every column
+  private processTop(imageData) {
     for (let x = this.x; x < this.x + this.width; x++) {
-      // Check each row of this column
-      for (let y = this.y; y < this.y + this.height; y++) {
+      let y = this.y;
+      while (y < this.y + this.height) {
         const base = (x + (y * this.image.width)) * 4;
         // Do we have a non-transparent pixel? Then this is the top
-        if (imageData[base + 3] !== 0) return x - this.x;
+        if (imageData[base + 3] !== 0) {
+          break;
+        }
+        y++;
       }
+      const finalY = y - this.y;
+      this.contour.top.push(finalY);
     }
-    // By default return the maximum
-    return this.width;
+    this.boundingBox.top = Math.min(...this.contour.top);
   }
 
-  private getRight(imageData) {
-    // Do this for every column
-    for (let x = this.x + this.width; x >= this.x; x--) {
-      // Check each row of this column
-      for (let y = this.y; y < this.y + this.height; y++) {
+  private processBottom(imageData) {
+    for (let x = this.x; x < this.x + this.width; x++) {
+      let y = this.y + this.height;
+      while (y >= this.y) {
         const base = (x + (y * this.image.width)) * 4;
-        // Do we have a non-transparent pixel? Then this is the top
-        if (imageData[base + 3] !== 0) return (this.width + this.x) - x;
+        if (imageData[base + 3] !== 0) {
+          break;
+        }
+        y--;
       }
+      const finalY = y - this.y;
+      this.contour.bottom.push(finalY);
     }
-    // By default return the minimum
-    return 0;
+    this.boundingBox.bottom = Math.min(...this.contour.bottom.map(value => this.height - value));
+  }
+
+  private processLeft(imageData) {
+    for (let y = this.y; y < this.y + this.height; y++) {
+      let x = this.x;
+      while (x < this.x + this.width) {
+        const base = (x + (y * this.image.width)) * 4;
+        if (imageData[base + 3] !== 0) {
+          break;
+        }
+        x++;
+      }
+      const finalX = x - this.x;
+      this.contour.left.push(finalX);
+    }
+    this.boundingBox.left = Math.min(...this.contour.left);
+  }
+
+  private processRight(imageData) {
+    this.boundingBox.right = this.width;
+    for (let y = this.y; y < this.y + this.height; y++) {
+      let x = this.x + this.width;
+      while (x >= this.x) {
+        const base = (x + (y * this.image.width)) * 4;
+        if (imageData[base + 3] !== 0) {
+          break;
+        }
+        x--;
+      }
+      const finalX = x - this.x;
+      this.contour.right.push(finalX);
+    }
+    this.boundingBox.right = Math.min(...this.contour.right.map(value => this.width - value));
   }
 }
