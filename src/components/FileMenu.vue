@@ -159,6 +159,7 @@ export default class FileMenu extends Vue {
       }
 
       return {
+        backgroundColor: map.backgroundColor || '#000000',
         grid,
         actors
       };
@@ -261,7 +262,11 @@ export default class FileMenu extends Vue {
 
     // Finally, populate the maps
     for (const map of content.maps) {
-      this.$store.commit('addMap', { grid: map.grid, actors: map.actors });
+      this.$store.commit('addMap', {
+        backgroundColor: map.backgroundColor || '#000000',
+        grid: map.grid,
+        actors: map.actors
+      });
     }
 
     this.$store.commit('setLoading', false);

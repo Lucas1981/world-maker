@@ -100,8 +100,10 @@ export default class FileHandler {
 
   public static downloadJsonFile(filename, json) {
     const a: any = document.createElement('a');
+    const stringifiedJson = JSON.stringify(json);
+    const encodedURIComponent = encodeURIComponent(stringifiedJson)
     a.setAttribute('download', filename);
-    a.setAttribute('href', 'data:text/json;charset=utf-8,' + JSON.stringify(json) );
+    a.setAttribute('href', `data:text/json;charset=utf-8,${encodedURIComponent}`);
     a.style.display = 'none';
     document.getElementsByTagName('body')[0].appendChild(a);
     a.click();

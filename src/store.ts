@@ -107,12 +107,13 @@ export default new Vuex.Store({
       state.unit = 0;
     },
     addMap(state, { grid = null, actors = null }: object = {}): void {
+      const backgroundColor = '#000000';
       const stagedActors = new LinkedList();
 
       if (grid === null) {
         grid = new Array(state.gridHeight);
         for (let i: number = 0; i < grid.length; i++) {
-          grid[i] = new Array(state.gridWidth).fill(0);
+          grid[i] = new Array(state.gridWidth).fill(null);
         }
       }
 
@@ -129,6 +130,7 @@ export default new Vuex.Store({
       }
 
       state.maps.push({
+        backgroundColor,
         grid,
         stagedActors
       });

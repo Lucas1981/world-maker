@@ -3,6 +3,12 @@
     <div class="row">
       <div class="col-2">
         <p>
+          <label>
+            Background color: <input type="color" v-if="maps && activeMap !== null" v-model="maps[activeMap].backgroundColor" />
+            {{ maps && activeMap !== null ? maps[activeMap].backgroundColor : 'no color' }}
+          </label>
+        </p>
+        <p>
           <button class="btn btn-primary" @click="addMap()" v-blur>Add map</button>
           <span class="mx-2" v-if="activeMap !== null" >
             <button class="btn btn-danger" @click="removeMap()" v-blur>Remove map</button>
@@ -128,7 +134,7 @@ export default class Maps extends Base {
     const now: Date = new Date();
     const elapsedTime: number = now - this.start;
 
-    this.mapCanvas.clearCanvas();
+    if (this.activeMap !== null) this.mapCanvas.fillCanvas(this.maps[this.activeMap].backgroundColor);
     this.drawAvailableTiles(elapsedTime);
     this.drawAvailableActors(elapsedTime);
     this.handleKeyboardInput(maxX, maxY);
@@ -296,12 +302,12 @@ export default class Maps extends Base {
   public drawGrid(elapsedTime: number): void {
     // Don't bother if we don't have any animations
     if(this.animations.length === 0) return;
-    this.mapCanvas.fillCanvas();
     const grid: Array = this.maps[this.activeMap].grid;
     const cameraX = parseInt(this.cameraX / this.unit);
     const cameraY = parseInt(this.cameraY / this.unit);
     for (let y: number = 0; y < this.cameraHeight; y++) {
       for (let x: number = 0; x < this.cameraWidth; x++) {
+        if (grid[y + cameraY][x + cameraX] === null) continue; // Skip the null tiles
         const tileValue: any = this.tilesMapper.getValue(grid[y + cameraY][x + cameraX]);
         if (
           typeof tileValue !== 'number' ||
