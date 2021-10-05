@@ -109,12 +109,18 @@ export default new Vuex.Store({
     addMap(state, { grid = null, actors = null }: object = {}): void {
       const backgroundColor = '#000000';
       const stagedActors = new LinkedList();
+      let newGrid: any;
 
       if (grid === null) {
-        grid = new Array(state.gridHeight);
-        for (let i: number = 0; i < grid.length; i++) {
-          grid[i] = new Array(state.gridWidth).fill(null);
+        newGrid = new Array(3);
+        for (let i: number = 0; i < 3; i++) {
+          newGrid[i] = new Array(state.gridHeight);
+          for (let j: number = 0; j < newGrid[i].length; j++) {
+            newGrid[i][j] = new Array(state.gridWidth).fill(0);
+          }
         }
+      } else {
+        newGrid = grid;
       }
 
       if (actors !== null) {
@@ -131,7 +137,7 @@ export default new Vuex.Store({
 
       state.maps.push({
         backgroundColor,
-        grid,
+        grid: newGrid,
         stagedActors
       });
     },

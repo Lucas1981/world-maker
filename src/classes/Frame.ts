@@ -71,7 +71,7 @@ export default class Frame {
 
   private processBottom(imageData) {
     for (let x = this.x; x < this.x + this.width; x++) {
-      let y = this.y + this.height;
+      let y = this.y + (this.height - 1);
       while (y >= this.y) {
         const base = (x + (y * this.image.width)) * 4;
         if (imageData[base + 3] !== 0) {
@@ -104,7 +104,7 @@ export default class Frame {
   private processRight(imageData) {
     this.boundingBox.right = this.width;
     for (let y = this.y; y < this.y + this.height; y++) {
-      let x = this.x + this.width;
+      let x = this.x + (this.width - 1);
       while (x >= this.x) {
         const base = (x + (y * this.image.width)) * 4;
         if (imageData[base + 3] !== 0) {

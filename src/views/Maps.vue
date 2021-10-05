@@ -44,6 +44,18 @@
         </ul>
         <div v-show="tab === 'elements'">
           <h4>Tiles</h4>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="radio-sub-layer" value="0" v-model="level" />
+            <label class="form-check-label" for="radio-sub-layer">Sub</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="radio-normal-layer" value="1" v-model="level" />
+            <label class="form-check-label" for="radio-sub-layer">Normal</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="radio-super-layer" value="2" v-model="level" />
+            <label class="form-check-label" for="radio-sub-layer">Super</label>
+          </div>
           <canvas
             ref="tiles"
             style="background-color:#f8f8f8;"
@@ -117,6 +129,7 @@ export default class Maps extends Base {
   public actorsCanvas: Canvas;
   public start: Date = null;
   public tab: string = 'elements';
+  public level: number = 1;
   private selectedIndex: number = -1;
   private isTileSelected: Boolean = false;
 
@@ -260,8 +273,8 @@ export default class Maps extends Base {
   }
 
   public fill(): void {
-    for (let y = 0; y < this.maps[this.activeMap].grid.length; y++) {
-      for (let x = 0; x < this.maps[this.activeMap].grid[0].length; x++) {
+    for (let y = 0; y < this.maps[this.activeMap].grid[this.level].length; y++) {
+      for (let x = 0; x < this.maps[this.activeMap].grid[this.level][0].length; x++) {
         this.placeTile(x, y);
       }
     }
@@ -269,14 +282,14 @@ export default class Maps extends Base {
 
   public fillRow(): void {
     const y: number = parseInt(this.y / this.unit);
-    for (let x = 0; x < this.maps[this.activeMap].grid[0].length; x++) {
+    for (let x = 0; x < this.maps[this.activeMap].grid[this.level][0].length; x++) {
       this.placeTile(x, y);
     }
   }
 
   public fillCol(): void {
     const x: number = parseInt(this.x / this.unit);
-    for (let y = 0; y < this.maps[this.activeMap].grid.length; y++) {
+    for (let y = 0; y < this.maps[this.activeMap].grid[this.level].length; y++) {
       this.placeTile(x, y);
     }
   }
@@ -285,7 +298,7 @@ export default class Maps extends Base {
     if (this.activeMap === null || this.selectedIndex === -1) return;
     if(this.isTileSelected) {
       const key = this.tilesMapper.getKey(this.selectedIndex);
-      this.maps[this.activeMap].grid[y][x] = key;
+      this.maps[this.activeMap].grid[this.level][y][x] = key;
     }
     else {
       const key = this.actorsMapper.getKey(this.selectedIndex);
@@ -302,29 +315,32 @@ export default class Maps extends Base {
   public drawGrid(elapsedTime: number): void {
     // Don't bother if we don't have any animations
     if(this.animations.length === 0) return;
-    const grid: Array = this.maps[this.activeMap].grid;
-    const cameraX = parseInt(this.cameraX / this.unit);
-    const cameraY = parseInt(this.cameraY / this.unit);
-    for (let y: number = 0; y < this.cameraHeight; y++) {
-      for (let x: number = 0; x < this.cameraWidth; x++) {
-        if (grid[y + cameraY][x + cameraX] === null) continue; // Skip the null tiles
-        const tileValue: any = this.tilesMapper.getValue(grid[y + cameraY][x + cameraX]);
-        if (
-          typeof tileValue !== 'number' ||
-          !('animation' in this.tiles[tileValue])
-        ) continue;
-        const animKey: number = this.tiles[tileValue].animation;
-        const animation: any = this.animationsMapper.getValue(animKey);
-        if (typeof animation === 'number') {
-          this.animations[animation].draw(
-            this.mapCanvas.getContext(),
-            parseInt(x * this.unit),
-            parseInt(y * this.unit),
-            elapsedTime
-          )
+    for (let i = 0; i < 3; i++) {
+      const grid: Array = this.maps[this.activeMap].grid[i];
+      const cameraX = parseInt(this.cameraX / this.unit);
+      const cameraY = parseInt(this.cameraY / this.unit);
+      for (let y: number = 0; y < this.cameraHeight; y++) {
+        for (let x: number = 0; x < this.cameraWidth; x++) {
+          if (grid[y + cameraY][x + cameraX] === null) continue; // Skip the null tiles
+          const tileValue: any = this.tilesMapper.getValue(grid[y + cameraY][x + cameraX]);
+          if (
+            typeof tileValue !== 'number' ||
+            !('animation' in this.tiles[tileValue])
+          ) continue;
+          const animKey: number = this.tiles[tileValue].animation;
+          const animation: any = this.animationsMapper.getValue(animKey);
+          if (typeof animation === 'number') {
+            this.animations[animation].draw(
+              this.mapCanvas.getContext(),
+              parseInt(x * this.unit),
+              parseInt(y * this.unit),
+              elapsedTime
+            )
+          }
         }
       }
     }
+
   }
 
   public drawStagedActors(elapsedTime: number): void {

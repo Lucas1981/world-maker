@@ -91,7 +91,8 @@ export default class FileMenu extends Vue {
       width: frame.width,
       height: frame.height,
       x: frame.x,
-      y: frame.y
+      y: frame.y,
+      contour: frame.contour
     }));
 
     // Then, let's record the sounds
@@ -151,10 +152,13 @@ export default class FileMenu extends Vue {
       }
 
       // Get the proper tiles
-      for (let i: number = 0; i < map.grid.length; i++) {
+      for (let i: number = 0; i < 3; i++) {
         grid[i] = [];
         for (let j: number = 0; j < map.grid[i].length; j++) {
-          grid[i][j] = this.$store.getters.tilesMapper.getValue(map.grid[i][j]);
+          grid[i][j] = [];
+          for (let k: number = 0; k < map.grid[i][j].length; k++) {
+            grid[i][j][k] = this.$store.getters.tilesMapper.getValue(map.grid[i][j][k]);
+          }
         }
       }
 
