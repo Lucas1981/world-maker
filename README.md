@@ -7,29 +7,31 @@ So this is a world editor. What it does is give you tools to more quickly develo
 - Populate a map with the tiles and actors you have created in the Maps tab. You can create a new map which will default to the first tile you have in your tiles as a background. You can move around with the arrow keys and commit tiles or actors from the panel. You can select the actor or tile you want by clicking on it. You can manage the actors separately in the 'Manage actors' tab
 - Save your world with the 'Save world' button which will download your world as a `.json` file (image data included)
 
-How is it built? I've used the Vuejs CLI to set up the project through their UI, and added in Bootstrap and TypeScript support. I use the Vue router and Vuex for a store to manage states with. TypeScript is implemented as strictly as I could manage right now, but it is likely you might run into some `any` types or non-typed variables in for-loops that were causing syntactic confusion. It's also mostly class based, creating the Vue views and components with classes. The `./src/views/Base.ts` class sets up the standard stuff for all the other views that extend it. State management is all done in the `./src/store.ts`. The whole app relies heavily on the `Canvas` html5 element to display all the images. For now the size of tiles is limited to 64x64 pixels and the grid maps are always 15x11.
+How is it built? I've used the Vuejs CLI to set up the project through their UI, and added in Bootstrap and TypeScript support. I use the Vue router and Vuex for a store to manage states with. TypeScript is implemented as strictly as I could manage right now, but it is likely you might run into some `any` types or non-typed variables in for-loops that were causing syntactic confusion. It's also mostly class based, creating the Vue views and components with classes. The `./src/views/Base.ts` class sets up the standard stuff for all the other views that extend it. State management is all done in the `./src/store.ts`. The whole app relies heavily on the `Canvas` html5 element to display all the images.
 
 A tricky part was mapping all the frames, animations, tiles and actors. Since you can commit for instance a frame that an animation might use, you have to be careful when deleting a frame. You can't rearrange the order of the frames because then the expectations of the already existing animations about what frame is where will be confused. For this reason I used some number-to-number mapping, where a unique id maps to the right frame. The ids never change, the proper frame might. The ids also auto-increment so as to avoid having more than one id ever point to a frame, which would happen if we'd take the length of the frames array to calculate the next frame id. This is done with the `Mapper.ts` class in the `./src/classes/Mapper.ts` class file. If anything, it felt like it resembled matching database records in different tables on a primary key.
 
-Plans for expansion:
-- Turn some inputs into components
+## Plans for expansion:
+
 X - Make any navigable canvas mouse-clickable
 X - Add a grid viewer to the frames screen
-- Add steps and unit size to the frame screen
 X - Add a button that automatically maps the selected grid density to frames (with a from/to limit)
-- Sort the animations inverted
 X - Keep the frame palette fixed
 X - Don't let keyboard input scroll the animations list
 X - Add a button that automatically maps the frames to animations
-- Set from/to limiter on frames to animations mappe
 X - Make a color that must be filtered selectable
-- Offer centering of transparency-padded selection
 X - Flood map with tile
 X - Flood map row with tile
 X - Flood map column with tile
+X - Add multiple grid layers for tiles
+- Turn some inputs into components
+- Add steps and unit size to the frame screen
+- Sort the animations inverted
+- Set from/to limiter on frames to animations mapper
+- Offer centering of transparency-padded selection
 - Add/remove map column
 - Add/remove map row
-- Add multiple grid layers for tiles
+- Add background / foreground image: repeatable, scrollable in both directions
 
 ## Project setup
 ```

@@ -47,14 +47,17 @@
           <div class="form-check">
             <input class="form-check-input" type="radio" id="radio-sub-layer" value="0" v-model="level" />
             <label class="form-check-label" for="radio-sub-layer">Sub</label>
+            <input type="checkbox" v-model="showLevel[0]"> Show
           </div>
           <div class="form-check">
             <input class="form-check-input" type="radio" id="radio-normal-layer" value="1" v-model="level" />
             <label class="form-check-label" for="radio-sub-layer">Normal</label>
+            <input type="checkbox" v-model="showLevel[1]"> Show
           </div>
           <div class="form-check">
             <input class="form-check-input" type="radio" id="radio-super-layer" value="2" v-model="level" />
             <label class="form-check-label" for="radio-sub-layer">Super</label>
+            <input type="checkbox" v-model="showLevel[2]"> Show
           </div>
           <canvas
             ref="tiles"
@@ -130,6 +133,7 @@ export default class Maps extends Base {
   public start: Date = null;
   public tab: string = 'elements';
   public level: number = 1;
+  public showLevel: [] = [true, true, true]
   private selectedIndex: number = -1;
   private isTileSelected: Boolean = false;
 
@@ -316,6 +320,7 @@ export default class Maps extends Base {
     // Don't bother if we don't have any animations
     if(this.animations.length === 0) return;
     for (let i = 0; i < 3; i++) {
+      if (!this.showLevel[i]) continue;
       const grid: Array = this.maps[this.activeMap].grid[i];
       const cameraX = parseInt(this.cameraX / this.unit);
       const cameraY = parseInt(this.cameraY / this.unit);

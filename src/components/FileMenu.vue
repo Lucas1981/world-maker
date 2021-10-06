@@ -266,9 +266,22 @@ export default class FileMenu extends Vue {
 
     // Finally, populate the maps
     for (const map of content.maps) {
+      let grid;
+      // Keep things backwards compatible with single map
+      if (map.grid[0][0].length) {
+        grid = map.grid;
+      } else {
+        let bg = new Array(map.grid.length);
+        let fg = new Array(map.grid.length);
+        for (let i = 0; i < map.grid.length; i++) {
+          bg[i] = new Array(map.grid[0].length).fill(0);
+          fg[i] = new Array(map.grid[0].length).fill(0);
+        }
+        grid = [bg, map.grid, fg];
+      }
       this.$store.commit('addMap', {
         backgroundColor: map.backgroundColor || '#000000',
-        grid: map.grid,
+        grid,
         actors: map.actors
       });
     }
